@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -15,18 +15,23 @@ import {
 
 interface CurrencySelectProps extends CurrencyProps {
   initialCurrency?: string;
+  initialValue?: string | number;
 }
 
 const CurrencySelect = ({
   currencies,
+  initialValue = '1',
   initialCurrency = 'USD',
 }: CurrencySelectProps) => {
   const [currency, setCurrency] = useState(initialCurrency);
-  const [value, setValue] = useState('1');
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    setCurrency(initialCurrency);
+  }, [initialCurrency]);
 
   const changeSelectHandler = (e: SelectChangeEvent) => {
     setCurrency(e.target.value as string);
-    console.log(e.target.value);
   };
 
   const changeInputHandler = (
@@ -36,6 +41,8 @@ const CurrencySelect = ({
 
     // @ts-ignore
     const enteredValue = e.nativeEvent.data;
+
+    console.log(e);
 
     if (
       !Number.isNaN(parseFloat(e.currentTarget.value)) ||
@@ -57,6 +64,7 @@ const CurrencySelect = ({
           onChange={changeInputHandler}
           inputProps={{
             type: 'number',
+            min: '0',
           }}
           sx={{
             pr: '0',

@@ -1,18 +1,27 @@
 // import styles from '@/styles/Home.module.scss';
 import HomePage from '@/components/HomePage/HomePage';
+import useCurrencyStore from '@/store/store';
 import { addFlagToCurrency } from '@/utils/addFlagsToCurrency';
-import { CurrencyList } from 'models/Currency';
 import { CurrencyProps } from 'models/Currency';
+import { useEffect } from 'react';
 
-export default function Home({ currencies }: CurrencyProps) {
-  return <HomePage currencies={currencies} />;
+function Home({ currencies }: CurrencyProps) {
+  const { addCurrencies } = useCurrencyStore((state) => state);
+
+  useEffect(() => {
+    addCurrencies(currencies);
+  }, [addCurrencies, currencies]);
+  return <HomePage />;
 }
+
 export async function getStaticProps() {
   const allFiats = await import('../../data/allFiats.json');
 
   return {
     props: {
-      currencies: addFlagToCurrency(allFiats),
+      currencies: addFlagToCurrency(allFiats.default),
     },
   };
 }
+
+export default Home;
