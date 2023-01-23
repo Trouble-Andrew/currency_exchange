@@ -13,7 +13,6 @@ interface InitialProps extends CurrencyProps {
 
 function Home({ currencies, rates }: InitialProps) {
   const { addCurrencies, addRate } = useCurrencyStore((state) => state);
-  const state = useCurrencyStore((state) => state);
 
   // console.log('INDEX STATE: ', state);
   // console.log('INDEX CURR: ', currencies);

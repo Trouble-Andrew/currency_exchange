@@ -21,6 +21,7 @@ const Converter = () => {
     toggle,
     addRate,
     changeFrom,
+    changeAmount,
     changeTo,
   } = useCurrencyStore((state) => state);
 
@@ -37,7 +38,7 @@ const Converter = () => {
     if (currentRate) {
       setToValue(calculate(amount, currentRate));
     }
-  }, []);
+  }, [currentRate]);
 
   useEffect(() => {
     if (currentRate) {
@@ -68,7 +69,6 @@ const Converter = () => {
     toggle();
     console.log(from);
     console.log(to);
-    console.log('TOGGLE RATE', currentRate);
 
     if (!currentRate) {
       // console.log('change');
@@ -80,12 +80,10 @@ const Converter = () => {
   };
 
   const selectFromHandler = async (currencyCode: string) => {
-    console.log(currencyCode);
     changeFrom(currencyCode);
   };
 
   const selectToHandler = async (currencyCode: string) => {
-    console.log(currencyCode);
     changeTo(currencyCode);
   };
 
@@ -93,14 +91,21 @@ const Converter = () => {
     // console.log(amount);
     if (currentRate) {
       // console.log(calculate(amount, currentRate));
+      const calculatedValue = calculate(amount, currentRate);
+
+      changeAmount(calculatedValue);
       setToValue(calculate(amount, currentRate));
+      setFromValue(Number(amount));
     }
   };
 
   const inputToHandler = async (amount: string | number) => {
-    // console.log(amount);
     if (currentRate) {
-      setFromValue(calculate(toValue, currentRate));
+      const calculatedValue = calculate(amount, currentRate);
+
+      changeAmount(calculatedValue);
+      setToValue(Number(amount));
+      setFromValue(calculatedValue);
     }
   };
 
