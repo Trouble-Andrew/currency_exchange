@@ -23,6 +23,9 @@ const darkTheme = createTheme({
     //   main: '#ffb703',
     // },
   },
+  typography: {
+    fontFamily: 'inherit',
+  },
 });
 
 export default function App({ Component, pageProps }: AppProps) {

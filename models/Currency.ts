@@ -2,6 +2,7 @@ export interface Currency {
   currency_name: string;
   currency_code: string;
   decimal_units: string;
+  flag?: string;
   countries: string[];
 }
 

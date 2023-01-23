@@ -12,16 +12,21 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
+import CurrencyFlag from '../CurrencyFlag/CurrencyFlag';
 
 interface CurrencySelectProps extends CurrencyProps {
   initialCurrency?: string;
   initialValue?: string | number;
+  changeValueHandler: (value: number | string) => void;
+  changeCurrencyHandler: (currency: string) => void;
 }
 
 const CurrencySelect = ({
   currencies,
   initialValue,
   initialCurrency,
+  changeValueHandler,
+  changeCurrencyHandler,
 }: CurrencySelectProps) => {
   const [currency, setCurrency] = useState('');
   const [value, setValue] = useState(initialValue);
@@ -30,10 +35,14 @@ const CurrencySelect = ({
     if (initialCurrency) {
       setCurrency(initialCurrency);
     }
-  }, [initialCurrency]);
+    setValue(initialValue);
+  }, [initialCurrency, initialValue]);
 
   const changeSelectHandler = (e: SelectChangeEvent) => {
-    setCurrency(e.target.value as string);
+    const currency = e.target.value;
+
+    setCurrency(currency as string);
+    changeCurrencyHandler(currency);
   };
 
   const changeInputHandler = (
@@ -44,14 +53,14 @@ const CurrencySelect = ({
     // @ts-ignore
     const enteredValue = e.nativeEvent.data;
 
-    console.log(e);
-
     if (
       !Number.isNaN(parseFloat(e.currentTarget.value)) ||
       enteredValue === 'e' ||
       enteredValue === null
     ) {
-      setValue(e.currentTarget.value);
+      const value = e.currentTarget.value;
+      setValue(value);
+      changeValueHandler(value);
     }
   };
 
@@ -86,6 +95,14 @@ const CurrencySelect = ({
                 label="Age"
                 onChange={changeSelectHandler}
                 sx={{
+                  '& .MuiInputBase-input': {
+                    pt: '0',
+                    pb: '0',
+                    pl: '1.1rem',
+                    // background: 'red',
+                    display: 'grid',
+                    placeContent: 'center',
+                  },
                   '& fieldset': {
                     borderTop: 'none',
                     borderBottom: 'none',
@@ -103,8 +120,12 @@ const CurrencySelect = ({
                   <MenuItem
                     value={currency.currency_code}
                     key={currency.currency_code}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}
                   >
-                    {currency.currency_code}
+                    <CurrencyFlag currency={currency} />
                   </MenuItem>
                 ))}
               </Select>

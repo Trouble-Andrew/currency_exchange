@@ -6,11 +6,13 @@ interface CurrencyState {
   from: string;
   to: string;
   amount: number | string;
-  currencies: Currency[] | [];
-  rates: Rates | {};
+  currencies: Currency[];
+  rates: Rates;
 
   toggle: () => void;
   changeAmount: (amount: number | string) => void;
+  changeFrom: (code: string) => void;
+  changeTo: (code: string) => void;
   addCurrencies: (currencies: Currency[] | []) => void;
   addRate: (rate: Rate) => void;
 }
@@ -21,6 +23,8 @@ const useCurrencyStore = create<CurrencyState>()((set) => ({
   amount: 1,
   currencies: [],
   rates: {},
+  changeFrom: (code: string) => set(() => ({ from: code })),
+  changeTo: (code: string) => set(() => ({ to: code })),
   toggle: () => set((state) => ({ from: state.to, to: state.from })),
   changeAmount: (newAmount) => set(() => ({ amount: newAmount })),
   addCurrencies: (newCurrencies: Currency[]) =>
