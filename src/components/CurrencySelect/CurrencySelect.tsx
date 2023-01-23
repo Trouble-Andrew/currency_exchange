@@ -20,14 +20,16 @@ interface CurrencySelectProps extends CurrencyProps {
 
 const CurrencySelect = ({
   currencies,
-  initialValue = '1',
-  initialCurrency = 'USD',
+  initialValue,
+  initialCurrency,
 }: CurrencySelectProps) => {
-  const [currency, setCurrency] = useState(initialCurrency);
+  const [currency, setCurrency] = useState('');
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
-    setCurrency(initialCurrency);
+    if (initialCurrency) {
+      setCurrency(initialCurrency);
+    }
   }, [initialCurrency]);
 
   const changeSelectHandler = (e: SelectChangeEvent) => {
