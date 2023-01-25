@@ -99,7 +99,7 @@ const CurrencySelect = ({
                     pt: '0',
                     pb: '0',
                     pl: '1.1rem',
-                    // background: 'red',
+                    mt: '8px',
                     display: 'grid',
                     placeContent: 'center',
                   },
