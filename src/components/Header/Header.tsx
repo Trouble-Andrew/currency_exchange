@@ -18,11 +18,17 @@ function Header() {
     : 'rub';
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{ backgroundColor: 'var(--color-background-grey-dark)' }}
+    >
       <Container maxWidth="lg">
         <Toolbar disableGutters>
           <CurrencyExchangeIcon
-            sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
+            sx={{
+              display: { xs: 'none', md: 'flex' },
+              mr: 1,
+            }}
           />
           <Typography
             variant="h6"

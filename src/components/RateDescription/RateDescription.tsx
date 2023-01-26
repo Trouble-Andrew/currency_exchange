@@ -1,3 +1,4 @@
+import { convertData } from '@/utils/convertData';
 import { Box, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
@@ -39,12 +40,12 @@ const RateDescription = ({
 
   return (
     <Box>
-      <Typography variant="body2" component="p">
+      <Typography variant="body2" component="p" sx={{ mb: '0.2rem' }}>
         1 {hydrationProps.from} = {hydrationProps.value} {hydrationProps.to}
       </Typography>
-      <Typography variant="body2" component="p">
+      <Typography variant="caption" component="p" sx={{ opacity: '0.7' }}>
         All data and information is provided “as is” for informational purposes
-        only {hydrationProps.date}
+        only &#x2022; {convertData(hydrationProps.date)}
       </Typography>
     </Box>
   );

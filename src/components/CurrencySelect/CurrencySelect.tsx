@@ -119,6 +119,7 @@ const CurrencySelect = memo(function CurrencySelect({
                     sx={{
                       display: 'flex',
                       justifyContent: 'center',
+                      backfaceVisibility: 'hidden',
                     }}
                   >
                     <CurrencyFlag currency={currency} />

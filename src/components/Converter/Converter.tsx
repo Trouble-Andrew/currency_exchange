@@ -1,13 +1,6 @@
-import { addFlagToCurrency } from '@/utils/addFlagsToCurrency';
 import { IconButton } from '@mui/material';
 import { Box } from '@mui/system';
-import React, {
-  Suspense,
-  useEffect,
-  startTransition,
-  useState,
-  useReducer,
-} from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import CurrencySelect from '../CurrencySelect/CurrencySelect';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import RateDescription from '../RateDescription/RateDescription';
@@ -18,7 +11,6 @@ import { calculate } from '@/utils/calculate';
 import { InitialProps } from '@/pages';
 import { useRouter } from 'next/router';
 import { INITIAL_FROM_CURRENCY, INITIAL_TO_CURRENCY } from '@/pages/constants';
-import { Currency } from 'models/Currency';
 
 type ACTIONTYPE =
   | { type: 'set_amount'; payload: string }
@@ -209,12 +201,21 @@ const Converter = ({
   };
 
   return (
-    <Box>
+    <Box
+      sx={{
+        borderRadius: '5px',
+        backgroundColor: 'var(--color-background-grey-dark)',
+        maxWidth: '45rem',
+        p: '15px',
+        m: '0 auto',
+      }}
+    >
       <Box
         sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          mb: '1rem',
         }}
       >
         <CurrencySelect

@@ -1,33 +1,31 @@
 import { CURRENCY_CODES } from '../constants';
-import { Rate } from 'models/Rates';
+import { Rates as RatesInterface } from 'models/Rates';
 import { GetStaticPropsContext } from 'next';
 import { Currency, CurrencyList } from 'models/Currency';
 import { addFlagToCurrency } from '@/utils/addFlagsToCurrency';
+import { Box } from '@mui/system';
+import CurrencyTable from '@/components/CurrencyTable/CurrencyTable';
+import { Typography } from '@mui/material';
+import { convertData } from '@/utils/convertData';
 
 interface Rates {
-  rates: Rate[];
+  rates: RatesInterface;
   base: string;
   currencies: CurrencyList;
 }
 
 const Rates = ({ base, rates, currencies }: Rates) => {
-  console.log(currencies);
-  console.log(CURRENCY_CODES);
-  console.log(rates[base].rates);
-  // const serializeRates = Object.entries(rates[base].rates).map((e) => ({
-  //   [e[0]]: e[1],
-  // }));
-
-  // console.log(serializeRates);
   return (
-    <div>
-      {CURRENCY_CODES.map((code) => (
-        <p key={code}>
-          {currencies[code]?.currency_name} - {code} -{' '}
-          {rates[base]?.rates[code]}
-        </p>
-      ))}
-    </div>
+    <Box>
+      <Typography variant="h3" component="h2" sx={{ mb: '2rem' }}>
+        Current Rates
+      </Typography>
+      <Typography variant="caption" component="p" sx={{ opacity: '0.7', mb: '0.7rem' }}>
+        All data and information is provided “as is” for informational purposes
+        only &#x2022; {convertData(rates[base].date)}
+      </Typography>
+      <CurrencyTable base={base} rates={rates} currencies={currencies} />
+    </Box>
   );
 };
 
@@ -50,8 +48,6 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   // fetchLatestRates();
   const serializeRubList = { [rubList.base]: { ...rubList } };
-  console.log(currency);
-  console.log(currenciesWithFlags);
 
   return {
     props: {
