@@ -1,9 +1,7 @@
-import { Currency } from 'models/Currency';
+import { CurrencyList } from 'models/Currency';
 
-export const getCurrencyName = (code: string, currencies: Currency[]) => {
-  const foundedCurrency = currencies.find(
-    (currency) => currency.currency_code === code,
-  );
+export const getCurrencyName = (code: string, currencies: CurrencyList) => {
+  const foundedCurrency = currencies[code];
 
   if (foundedCurrency) {
     return foundedCurrency.currency_name;

@@ -4,6 +4,8 @@ import type { AppProps } from 'next/app';
 import { Poppins } from '@next/font/google';
 import Head from 'next/head';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { GetServerSidePropsContext } from 'next';
+import { INITIAL_FROM_CURRENCY } from './constants';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -43,3 +45,4 @@ export default function App({ Component, pageProps }: AppProps) {
     </ThemeProvider>
   );
 }
+

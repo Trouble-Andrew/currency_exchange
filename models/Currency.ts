@@ -11,5 +11,5 @@ export interface CurrencyList {
 }
 
 export interface CurrencyProps {
-  currencies: Currency[];
+  currencies: CurrencyList;
 }

@@ -7,6 +7,9 @@ export const MAIN_KEY = '678605141e3237b7e9c7a02a2edb15e3';
 // latest example
 // 'https://api.currencybeacon.com/v1/latest?api_key=678605141e3237b7e9c7a02a2edb15e3&base=USD&symbols=RUB,EUR,GBP,JPY,TRY,KZT,UAH,BYN,KGS,CNY,GEL,CHF,PLN'
 
+export const INITIAL_FROM_CURRENCY = 'RUB';
+export const INITIAL_TO_CURRENCY = 'USD';
+
 export const CURRENCY_CODES = [
   'USD',
   'RUB',

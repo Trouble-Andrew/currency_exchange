@@ -1,38 +1,119 @@
-import useCurrencyStore from '@/store/store';
 import { addFlagToCurrency } from '@/utils/addFlagsToCurrency';
 import { IconButton } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { Suspense, useEffect, startTransition, useState } from 'react';
+import React, {
+  Suspense,
+  useEffect,
+  startTransition,
+  useState,
+  useReducer,
+} from 'react';
 import CurrencySelect from '../CurrencySelect/CurrencySelect';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import RateDescription from '../RateDescription/RateDescription';
 import { getCurrencyName } from '@/utils/getCurrencyName';
-import { Rate } from 'models/Rates';
+import { Rate, Rates } from 'models/Rates';
 import { getCurrentRate } from '@/utils/getCurrentRate';
 import { calculate } from '@/utils/calculate';
+import { InitialProps } from '@/pages';
+import { useRouter } from 'next/router';
+import { INITIAL_FROM_CURRENCY, INITIAL_TO_CURRENCY } from '@/pages/constants';
+import { Currency } from 'models/Currency';
 
-const Converter = () => {
-  const {
+type ACTIONTYPE =
+  | { type: 'set_amount'; payload: string }
+  | { type: 'set_from'; payload: string }
+  | { type: 'set_to'; payload: string }
+  | { type: 'add_rate'; payload: Rate }
+  | { type: 'toggle' };
+
+interface State {
+  from: string;
+  to: string;
+  amount: string | number;
+  rates: Rates | [];
+}
+
+const initialState: State = {
+  from: INITIAL_FROM_CURRENCY,
+  to: INITIAL_TO_CURRENCY,
+  amount: 1,
+  rates: [],
+};
+
+function reducer(state: State, action: ACTIONTYPE) {
+  switch (action.type) {
+    case 'set_amount': {
+      return {
+        ...state,
+        amount: action.payload,
+      };
+    }
+    case 'set_from': {
+      return {
+        ...state,
+        from: action.payload,
+      };
+    }
+    case 'set_to': {
+      return {
+        ...state,
+        to: action.payload,
+      };
+    }
+    case 'set_to': {
+      return {
+        ...state,
+        to: action.payload,
+      };
+    }
+    case 'toggle': {
+      console.log('toggle');
+      return {
+        ...state,
+        from: state.to,
+        to: state.from,
+      };
+    }
+    case 'add_rate': {
+      console.log(action.payload);
+      return {
+        ...state,
+        rates: {
+          ...state.rates,
+          [action.payload.base]: action.payload,
+        },
+      };
+    }
+    default:
+      Error();
+  }
+}
+
+const Converter = ({
+  currencies,
+  rates = initialState.rates,
+  amount = initialState.amount,
+  from = initialState.from,
+  to = initialState.to,
+}: InitialProps) => {
+  const { push, query } = useRouter();
+  const [state, dispatch] = useReducer(reducer, {
+    rates,
+    amount,
     from,
     to,
-    amount,
-    rates,
-    currencies,
-    toggle,
-    addRate,
-    changeFrom,
-    changeAmount,
-    changeTo,
-  } = useCurrencyStore((state) => state);
+  });
 
-  let currentRate = getCurrentRate(from, to, rates);
+  typeof state;
 
-  const [fromValue, setFromValue] = useState(1);
+  let currentRate = getCurrentRate(state.from, state.to, state.rates);
+  console.log('CURRENT RATE: ', currentRate);
+
+  const [fromValue, setFromValue] = useState(amount);
   const [toValue, setToValue] = useState(
     calculate(amount, currentRate !== null ? currentRate : 1),
   );
-
-  console.log(currentRate);
 
   useEffect(() => {
     if (currentRate) {
@@ -49,14 +130,18 @@ const Converter = () => {
         const serializeUsdRate = { ...usdRate };
         // console.log(serializeUsdRate.response);
         // return serializeUsdRate.response;
-        addRate(serializeUsdRate.response);
+        dispatch({
+          type: 'add_rate',
+          payload: serializeUsdRate.response,
+        });
       };
 
       if (!currentRate) {
         fetchRate();
       }
     }
-  }, [from, to]);
+    console.log(state);
+  }, [state.from, state.to]);
 
   const fetchRate = async () => {
     const usdRate = await import('../../../data/allLatestUSDRes.json');
@@ -66,9 +151,11 @@ const Converter = () => {
   };
 
   const handleToggle = async () => {
-    toggle();
-    console.log(from);
-    console.log(to);
+    dispatch({ type: 'toggle' });
+
+    push({ query: { ...query, from: state.to, to: state.from } }, undefined, {
+      shallow: true,
+    });
 
     if (!currentRate) {
       // console.log('change');
@@ -80,11 +167,19 @@ const Converter = () => {
   };
 
   const selectFromHandler = async (currencyCode: string) => {
-    changeFrom(currencyCode);
+    dispatch({ type: 'set_from', payload: currencyCode });
+
+    push({ query: { ...query, from: currencyCode } }, undefined, {
+      shallow: true,
+    });
   };
 
   const selectToHandler = async (currencyCode: string) => {
-    changeTo(currencyCode);
+    dispatch({ type: 'set_to', payload: currencyCode });
+
+    push({ query: { ...query, to: currencyCode } }, undefined, {
+      shallow: true,
+    });
   };
 
   const inputFromHandler = async (amount: string | number) => {
@@ -93,9 +188,13 @@ const Converter = () => {
       // console.log(calculate(amount, currentRate));
       const calculatedValue = calculate(amount, currentRate);
 
-      changeAmount(calculatedValue);
+      dispatch({ type: 'set_amount', payload: calculatedValue });
       setToValue(calculate(amount, currentRate));
       setFromValue(Number(amount));
+
+      push({ query: { ...query, amount: String(amount) } }, undefined, {
+        shallow: true,
+      });
     }
   };
 
@@ -103,7 +202,7 @@ const Converter = () => {
     if (currentRate) {
       const calculatedValue = calculate(amount, currentRate);
 
-      changeAmount(calculatedValue);
+      dispatch({ type: 'set_amount', payload: calculatedValue });
       setToValue(Number(amount));
       setFromValue(calculatedValue);
     }
@@ -121,7 +220,7 @@ const Converter = () => {
         <CurrencySelect
           currencies={currencies}
           initialValue={fromValue}
-          initialCurrency={from}
+          initialCurrency={state.from}
           changeCurrencyHandler={selectFromHandler}
           changeValueHandler={inputFromHandler}
         />
@@ -136,15 +235,15 @@ const Converter = () => {
         </IconButton>
         <CurrencySelect
           currencies={currencies}
-          initialCurrency={to}
+          initialCurrency={state.to}
           initialValue={toValue}
           changeCurrencyHandler={selectToHandler}
           changeValueHandler={inputToHandler}
         />
       </Box>
       <RateDescription
-        fromCurrencyName={getCurrencyName(from, currencies)}
-        toCurrencyName={getCurrencyName(to, currencies)}
+        fromCurrencyName={getCurrencyName(state.from, currencies)}
+        toCurrencyName={getCurrencyName(state.to, currencies)}
         date={rates[from]?.date}
         value={currentRate}
       />

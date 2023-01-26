@@ -1,51 +1,51 @@
 import { CurrencyList } from 'models/Currency';
 
 export const addFlagToCurrency = (allFiats: CurrencyList) => {
-  const requiredCurrencies = [];
+  const requiredCurrencies = {} as CurrencyList;
 
   for (const fiat in allFiats) {
     switch (allFiats[fiat].currency_code) {
       case 'RUB':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'ru' });
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'ru' };
         break;
       case 'USD':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'us' });
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'us' };
         break;
       case 'EUR':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'eu' });
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'eu' };
         break;
       case 'GBP':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'gb' });
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'gb' };
         break;
       case 'JPY':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'jp' });
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'jp' };
         break;
       case 'TRY':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'tr' });
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'tr' };
         break;
       case 'KZT':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'kz' });
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'kz' };
         break;
       case 'UAH':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'ua' });
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'ua' };
         break;
       case 'BYN':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'by' });
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'by' };
         break;
-      case 'KGZ':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'kg' });
+      case 'KGS':
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'kg' };
         break;
       case 'CNY':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'cn' });
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'cn' };
         break;
       case 'GEL':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'ge' });
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'ge' };
         break;
       case 'CHF':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'ch' });
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'ch' };
         break;
       case 'PLN':
-        requiredCurrencies.push({ ...allFiats[fiat], flag: 'pl' });
+        requiredCurrencies[fiat] = { ...allFiats[fiat], flag: 'pl' };
         break;
       default:
         break;

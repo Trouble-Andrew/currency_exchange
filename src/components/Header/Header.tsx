@@ -6,8 +6,17 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import Link from 'next/link';
+import { GetServerSidePropsContext } from 'next';
+import { INITIAL_FROM_CURRENCY } from '@/pages/constants';
+import { useRouter } from 'next/router';
 
 function Header() {
+  const router = useRouter();
+
+  const baseCurrency = router.query.from
+    ? String(router.query.from).toLowerCase()
+    : 'rub';
+
   return (
     <AppBar position="static">
       <Container maxWidth="lg">
@@ -40,12 +49,12 @@ function Header() {
               justifyContent: 'flex-end',
             }}
           >
-            <Link href="/">
+            <Link href={`/`} passHref>
               <Button sx={{ my: 2, color: 'white', display: 'block' }}>
                 Converter
               </Button>
             </Link>
-            <Link href="/rates">
+            <Link href={`/rates/${baseCurrency}`} passHref>
               <Button sx={{ my: 2, color: 'white', display: 'block' }}>
                 Rates
               </Button>

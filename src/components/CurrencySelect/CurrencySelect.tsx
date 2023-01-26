@@ -1,9 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import { CurrencyProps } from 'models/Currency';
+import React, { useEffect, useState, memo } from 'react';
+import { Currency, CurrencyList, CurrencyProps } from 'models/Currency';
 import {
   FormControl,
   InputAdornment,
@@ -21,15 +17,17 @@ interface CurrencySelectProps extends CurrencyProps {
   changeCurrencyHandler: (currency: string) => void;
 }
 
-const CurrencySelect = ({
+const CurrencySelect = memo(function CurrencySelect({
   currencies,
   initialValue,
   initialCurrency,
   changeValueHandler,
   changeCurrencyHandler,
-}: CurrencySelectProps) => {
+}: CurrencySelectProps) {
   const [currency, setCurrency] = useState('');
   const [value, setValue] = useState(initialValue);
+
+  const currenciesArray = Object.entries(currencies).map((e) => e[1]);
 
   useEffect(() => {
     if (initialCurrency) {
@@ -67,7 +65,6 @@ const CurrencySelect = ({
   return (
     <>
       <FormControl variant="standard">
-        {/* <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel> */}
         <OutlinedInput
           id="outlined-adornment-password"
           type={'text'}
@@ -82,7 +79,6 @@ const CurrencySelect = ({
             '&:hover': {
               '.MuiSelect-select fieldset': {
                 borderColor: 'rgba(255, 255, 255, 0.23) !important',
-                // background: 'red',
               },
             },
           }}
@@ -116,7 +112,7 @@ const CurrencySelect = ({
                   },
                 }}
               >
-                {currencies.map((currency) => (
+                {currenciesArray.map((currency) => (
                   <MenuItem
                     value={currency.currency_code}
                     key={currency.currency_code}
@@ -131,11 +127,10 @@ const CurrencySelect = ({
               </Select>
             </InputAdornment>
           }
-          // label="Password"
         />
       </FormControl>
     </>
   );
-};
+});
 
 export default CurrencySelect;
