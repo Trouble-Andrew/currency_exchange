@@ -19,18 +19,27 @@ const Rates = ({ base, rates, currencies, historical }: Rates) => {
   console.log(historical);
   return (
     <Box>
-      <Typography variant="h3" component="h2" sx={{ mb: '2rem' }}>
+      <Typography
+        variant="h3"
+        component="h2"
+        sx={{ mb: '2rem', fontSize: { xs: '2.5rem', sm: '3rem' } }}
+      >
         Current Rates
       </Typography>
       <Typography
         variant="caption"
         component="p"
-        sx={{ opacity: '0.7', mb: '-2.2rem' }}
+        sx={{ opacity: '0.7', mb: { xs: '0', md: '-2.2rem' } }}
       >
         All data and information is provided “as is” for informational purposes
         only &#x2022; {convertData(rates[base].date)}
       </Typography>
-      <RatesTable base={base} rates={rates} currencies={currencies} historical={historical} />
+      <RatesTable
+        base={base}
+        rates={rates}
+        currencies={currencies}
+        historical={historical}
+      />
     </Box>
   );
 };

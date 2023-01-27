@@ -213,9 +213,10 @@ const Converter = ({
       <Box
         sx={{
           display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
           alignItems: 'center',
           justifyContent: 'center',
-          mb: '1rem',
+          mb: '2rem',
         }}
       >
         <CurrencySelect
@@ -229,7 +230,7 @@ const Converter = ({
           color="inherit"
           onClick={handleToggle}
           sx={{
-            m: '0 1rem',
+            m: { xs: '0.7rem', sm: '0 1rem' },
           }}
         >
           <SwapHorizIcon />

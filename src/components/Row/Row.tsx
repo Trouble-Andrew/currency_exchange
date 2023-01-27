@@ -14,7 +14,7 @@ interface RowProps {
 const Row = ({ currency, amount, previousAmount, sx = [] }: RowProps) => {
   const changeValue = calculateChange(amount, previousAmount);
   let valueColor;
-  
+
   if (changeValue === 0) {
     valueColor = 'white';
   } else if (changeValue > 0) {
@@ -32,7 +32,7 @@ const Row = ({ currency, amount, previousAmount, sx = [] }: RowProps) => {
     >
       <TableCell component="th" scope="row">
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <CurrencyFlag currency={currency} sx={{ mr: '2rem', mt: '0.5rem' }} />
+          <CurrencyFlag currency={currency} sx={{ mr: {xs: '0', sm: '2rem'}, mt: '0.5rem' }} />
           <Typography
             variant="body1"
             component="span"

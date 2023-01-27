@@ -28,8 +28,8 @@ function Header() {
         <Toolbar disableGutters>
           <CurrencyExchangeIcon
             sx={{
-              display: { xs: 'none', md: 'flex' },
               mr: 1,
+              fontSize: { xs: '2rem', sm: '1.6rem' },
             }}
           />
           <Typography
@@ -39,7 +39,7 @@ function Header() {
             href="/"
             sx={{
               mr: 2,
-              display: { xs: 'none', md: 'flex' },
+              display: { xs: 'none', sm: 'flex' },
               fontWeight: 700,
               color: 'inherit',
               textDecoration: 'none',
@@ -47,13 +47,10 @@ function Header() {
           >
             Currency Converter
           </Typography>
-          <CurrencyExchangeIcon
-            sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}
-          />
           <Box
             sx={{
               flexGrow: 1,
-              display: { xs: 'flex', md: 'flex' },
+              display: 'flex',
               justifyContent: 'flex-end',
             }}
           >

@@ -30,8 +30,6 @@ const CurrencyFlag = ({ sx = [], currency }: CurrencyFlagProps) => {
         }}
       >
         <Image
-          // width={20}
-          // height={18}
           fill={true}
           src={`https://flagcdn.com/${currency.flag}.svg`}
           alt={`${currency.currency_name}`}
