@@ -1,6 +1,5 @@
 import React, { HTMLAttributes, PropsWithChildren } from 'react';
-// import Footer from '../Footer/Footer';
-// import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 import Container from '@mui/material/Container';
 import styles from './MainLayout.module.scss';
 import Header from '../Header/Header';
@@ -15,7 +14,7 @@ const MainLayout: React.FC<PropsWithChildren<MainLayoutProps>> = (props) => {
         <main className={styles.main}>
           <Container maxWidth="lg">{props.children}</Container>
         </main>
-        {/* <Footer /> */}
+        <Footer />
       </div>
     </div>
   );

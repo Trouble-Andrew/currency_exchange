@@ -6,7 +6,6 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import Link from 'next/link';
-import { GetServerSidePropsContext } from 'next';
 import { INITIAL_FROM_CURRENCY } from '@/pages/constants';
 import { useRouter } from 'next/router';
 
@@ -20,7 +19,10 @@ function Header() {
   return (
     <AppBar
       position="static"
-      sx={{ backgroundColor: 'var(--color-background-grey-dark)' }}
+      sx={{
+        backgroundColor: 'var(--color-background-grey-dark)',
+        backgroundImage: 'none',
+      }}
     >
       <Container maxWidth="lg">
         <Toolbar disableGutters>

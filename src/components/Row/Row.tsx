@@ -2,14 +2,27 @@ import { Box, TableCell, TableRow, Typography } from '@mui/material';
 import { Currency } from 'models/Currency';
 import CurrencyFlag from '../CurrencyFlag/CurrencyFlag';
 import { SxProps, Theme } from '@mui/material/styles';
+import { calculateChange } from '@/utils/calculateChange';
 
 interface RowProps {
   currency: Currency;
   amount: number;
+  previousAmount: number;
   sx?: SxProps<Theme>;
 }
 
-const Row = ({ currency, amount, sx = [] }: RowProps) => {
+const Row = ({ currency, amount, previousAmount, sx = [] }: RowProps) => {
+  const changeValue = calculateChange(amount, previousAmount);
+  let valueColor;
+  
+  if (changeValue === 0) {
+    valueColor = 'white';
+  } else if (changeValue > 0) {
+    valueColor = 'green';
+  } else {
+    valueColor = 'red';
+  }
+
   return (
     <TableRow
       sx={[
@@ -33,6 +46,18 @@ const Row = ({ currency, amount, sx = [] }: RowProps) => {
         <Typography variant="body1" component="span" sx={{ fw: '1rem' }}>
           {amount}
         </Typography>
+      </TableCell>
+      <TableCell align="right" sx={{ fontWeight: '1rem' }}>
+        {previousAmount !== 0 && (
+          <Typography
+            variant="body1"
+            component="span"
+            sx={{ fw: '1rem' }}
+            color={`var(--color-${valueColor})`}
+          >
+            {`${calculateChange(amount, previousAmount)}%`}
+          </Typography>
+        )}
       </TableCell>
     </TableRow>
   );

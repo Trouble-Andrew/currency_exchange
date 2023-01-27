@@ -19,7 +19,6 @@ function Home({ currencies, rates, amount, from, to }: InitialProps) {
   // console.log('INDEX STATE: ', state);
   // console.log('INDEX CURR: ', currencies);
   // console.log('INDEX RATES: ', rates);
-  console.log(1);
 
   // useEffect(() => {
   //   // addCurrencies(currencies);
@@ -45,9 +44,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const rubList = await import('../../data/allLatestRUBRRes.json');
 
   const { amount, from, to } = context.query;
-  console.log('amount: ', amount);
-  console.log('from: ', from);
-  console.log('to: ', to);
+  // console.log('amount: ', amount);
+  // console.log('from: ', from);
+  // console.log('to: ', to);
 
   // const usdRate = await import('../../data/allLatestUSDRes.json');
   // const serializeUsdRate = { ...usdRate };
