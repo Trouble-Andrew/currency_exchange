@@ -7,6 +7,7 @@ import { Box } from '@mui/system';
 import RatesTable from '@/components/RatesTable/RatesTable';
 import { Typography } from '@mui/material';
 import { convertData } from '@/utils/convertData';
+import { memo } from 'react';
 
 interface Rates {
   rates: RatesInterface;
@@ -15,7 +16,12 @@ interface Rates {
   historical: Rate;
 }
 
-const Rates = ({ base, rates, currencies, historical }: Rates) => {
+const Rates = memo(function Rates({
+  base,
+  rates,
+  currencies,
+  historical,
+}: Rates) {
   console.log(historical);
   return (
     <Box>
@@ -42,7 +48,7 @@ const Rates = ({ base, rates, currencies, historical }: Rates) => {
       />
     </Box>
   );
-};
+});
 
 export default Rates;
 

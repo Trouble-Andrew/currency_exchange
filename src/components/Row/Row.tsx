@@ -32,7 +32,10 @@ const Row = ({ currency, amount, previousAmount, sx = [] }: RowProps) => {
     >
       <TableCell component="th" scope="row">
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <CurrencyFlag currency={currency} sx={{ mr: {xs: '0', sm: '2rem'}, mt: '0.5rem' }} />
+          <CurrencyFlag
+            currency={currency}
+            sx={{ mr: { xs: '0', sm: '2rem' }, mt: '0.5rem' }}
+          />
           <Typography
             variant="body1"
             component="span"
