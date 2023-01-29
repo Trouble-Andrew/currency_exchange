@@ -10,20 +10,21 @@ import { Rate, Rates } from 'models/Rates';
 import { CurrencyList } from 'models/Currency';
 import { CURRENCY_CODES } from '@/pages/constants';
 import Row from '../Row/Row';
+import { CURRENCIES } from '@/pages/constants';
 
 interface RatesTableProps {
   rates: Rates;
   base: string;
-  currencies: CurrencyList;
   historical: Rate;
 }
 
 const RatesTable = memo(function RatesTable({
   base,
   rates,
-  currencies,
   historical,
 }: RatesTableProps) {
+  const currencies = CURRENCIES as CurrencyList;
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">

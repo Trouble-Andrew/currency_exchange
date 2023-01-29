@@ -1,4 +1,4 @@
-import { IconButton } from '@mui/material';
+import { CircularProgress, IconButton } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState, useReducer, memo } from 'react';
 import CurrencySelect from '../CurrencySelect/CurrencySelect';
@@ -10,14 +10,18 @@ import { getCurrentRate } from '@/utils/getCurrentRate';
 import { calculate } from '@/utils/calculate';
 import { InitialProps } from '@/pages';
 import { useRouter } from 'next/router';
-import { INITIAL_FROM_CURRENCY, INITIAL_TO_CURRENCY } from '@/pages/constants';
+import {
+  INITIAL_FROM_CURRENCY,
+  INITIAL_TO_CURRENCY,
+  CURRENCIES,
+} from '@/pages/constants';
 import { useGlobalContext } from '@/contexts';
+import useRate from '@/hooks/useRate';
 
 type ActionType =
   | { type: 'set_amount'; payload: string | number }
   | { type: 'set_from'; payload: string }
   | { type: 'set_to'; payload: string }
-  | { type: 'add_rate'; payload: Rate }
   | { type: 'toggle' };
 
 interface State {
@@ -47,12 +51,6 @@ function reducer(state: State, action: ActionType): State {
         to: action.payload,
       };
     }
-    case 'set_to': {
-      return {
-        ...state,
-        to: action.payload,
-      };
-    }
     case 'toggle': {
       return {
         ...state,
@@ -60,81 +58,57 @@ function reducer(state: State, action: ActionType): State {
         to: state.from,
       };
     }
-    case 'add_rate': {
-      return {
-        ...state,
-        rates: {
-          ...state.rates,
-          [action.payload.base]: action.payload,
-        },
-      };
-    }
   }
 }
 
-const Converter = memo(function Converter({
-  currencies,
-  rates,
-  amount,
-  from,
-  to,
-}: InitialProps) {
-  const { push, query, asPath } = useRouter();
+const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
+  const currencies = CURRENCIES;
+  const { push, query, asPath, pathname } = useRouter();
+  const { rate, isLoading, isError } = useRate(query.from || from);
+  const { setQuery, addRate, rates } = useGlobalContext();
+
   const [state, dispatch] = useReducer(reducer, {
-    amount: amount,
-    from: from,
-    to: to,
-    rates: rates,
+    amount: query?.amount || amount,
+    from: query?.from || from,
+    to: query?.to || to,
   });
 
-  let currentRate = getCurrentRate(state.from, state.to, state.rates);
+  let currentRate = getCurrentRate(state.from, state.to, rates);
   // console.log('CURRENT RATE: ', currentRate);
-  console.log('CURRENT RATE: ', rates);
+  // console.log('CURRENT RATE: ', rates);
 
-  const [fromValue, setFromValue] = useState(amount);
+  const [fromValue, setFromValue] = useState(state.amount);
   const [toValue, setToValue] = useState(
-    calculate(amount, currentRate !== null ? currentRate : 1),
+    calculate(state.amount, currentRate !== null ? currentRate : 1),
   );
 
-  const { setQuery } = useGlobalContext();
+  // console.log('STATE: ', state);
+  // console.log('QUERY: ', query);
+  // console.log('FETCHER RATE', rate);
 
-  useEffect(() => {
-    if (currentRate) {
-      setToValue(calculate(amount, currentRate));
-    }
-  }, [currentRate]);
+  // console.log(rate.response);
 
   useEffect(() => {
     if (currentRate) {
       setToValue(calculate(fromValue, currentRate));
     } else {
       const fetchRate = async () => {
-        const usdRate = await import('../../../data/allLatestUSDRes.json');
-        const serializeUsdRate = { ...usdRate };
-        // console.log(serializeUsdRate.response);
-        // return serializeUsdRate.response;
-        dispatch({
-          type: 'add_rate',
-          payload: serializeUsdRate.response,
-        });
+        if (!isLoading && !isError) {
+          addRate(rate.response);
+        }
       };
 
       if (!currentRate) {
         fetchRate();
       }
     }
-  }, [state.from, state.to]);
 
-  useEffect(() => {
     setQuery(asPath);
-  });
+  }, [state.from, state.to, isLoading, isError, currentRate]);
 
-  const fetchRate = async () => {
-    const usdRate = await import('../../../data/allLatestUSDRes.json');
-    const serializeUsdRate = { ...usdRate };
-    // console.log(serializeUsdRate.response);
-    return serializeUsdRate.response;
-  };
+  // useEffect(() => {
+  //   setQuery(asPath);
+  // });
 
   const handleToggle = async () => {
     dispatch({ type: 'toggle' });
@@ -142,17 +116,10 @@ const Converter = memo(function Converter({
     push({ query: { ...query, from: state.to, to: state.from } }, undefined, {
       shallow: true,
     });
-
-    if (!currentRate) {
-      // console.log('change');
-      // // addRate(serializeUsdRate.default.response);
-      // const newRate = await fetchRate();
-      // console.log(newRate);
-      // addRate(newRate);
-    }
   };
 
   const selectFromHandler = async (currencyCode: string) => {
+    console.log(isLoading);
     dispatch({ type: 'set_from', payload: currencyCode });
 
     push({ query: { ...query, from: currencyCode } }, undefined, {
@@ -204,9 +171,11 @@ const Converter = memo(function Converter({
   return (
     <Box
       sx={{
+        position: 'relative',
         borderRadius: '5px',
         backgroundColor: 'var(--color-background-grey-dark)',
         maxWidth: '45rem',
+        minHeight: '10.125rem',
         p: '15px',
         m: '0 auto',
       }}
@@ -247,9 +216,16 @@ const Converter = memo(function Converter({
       <RateDescription
         fromCurrencyName={getCurrencyName(state.from, currencies)}
         toCurrencyName={getCurrencyName(state.to, currencies)}
-        date={rates[from]?.date}
+        date={rates[state.from]?.date}
         value={currentRate}
       />
+      {isLoading && (
+        <CircularProgress
+          color="success"
+          size={18}
+          sx={{ position: 'absolute', right: '0.7rem', bottom: '0.7rem' }}
+        />
+      )}
     </Box>
   );
 });

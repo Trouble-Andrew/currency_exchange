@@ -1,4 +1,4 @@
-import { CURRENCY_CODES } from '../constants';
+import { CURRENCY_CODES, MAIN_KEY, MAIN_URl } from '../constants';
 import { Rate, Rates as RatesInterface } from 'models/Rates';
 import { GetStaticPropsContext } from 'next';
 import { CurrencyList } from 'models/Currency';
@@ -8,21 +8,15 @@ import RatesTable from '@/components/RatesTable/RatesTable';
 import { Typography } from '@mui/material';
 import { convertData } from '@/utils/convertData';
 import { memo } from 'react';
+import { getCurrencySymbols } from '@/utils/getCurrencySymbols';
 
 interface Rates {
   rates: RatesInterface;
   base: string;
-  currencies: CurrencyList;
   historical: Rate;
 }
 
-const Rates = memo(function Rates({
-  base,
-  rates,
-  currencies,
-  historical,
-}: Rates) {
-  console.log(historical);
+const Rates = memo(function Rates({ base, rates, historical }: Rates) {
   return (
     <Box>
       <Typography
@@ -40,12 +34,7 @@ const Rates = memo(function Rates({
         All data and information is provided “as is” for informational purposes
         only &#x2022; {convertData(rates[base].date)}
       </Typography>
-      <RatesTable
-        base={base}
-        rates={rates}
-        currencies={currencies}
-        historical={historical}
-      />
+      <RatesTable base={base} rates={rates} historical={historical} />
     </Box>
   );
 });
@@ -53,10 +42,21 @@ const Rates = memo(function Rates({
 export default Rates;
 
 export async function getStaticProps(context: GetStaticPropsContext) {
-  let currency = context.params?.currency;
-  const allFiats = await import('../../../data/allFiats.json');
-  const currenciesWithFlags = addFlagToCurrency(allFiats.default);
+  let baseCurrency = context.params?.currency as string;
+  const otherCurrencies = getCurrencySymbols(baseCurrency);
+
   const rubHistorical = await import('../../../data/historicalRub.json');
+
+  // const ratesResponse = await fetch(
+  //   `${MAIN_URl}/latest?api_key=${MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}`,
+  // );
+  const ratesResponse = await fetch(
+    `https://gist.githubusercontent.com/Trouble-Andrew/f796c665bec4e6ca919285267d06ce84/raw/ed902c9a133f4ca946644da3c8319d89f1764903/${baseCurrency.toLowerCase()}.json`,
+  );
+  const ratesJson = await ratesResponse.json();
+  const rates = await ratesJson.response;
+
+  // console.log(rates);
 
   // const historical = await fetch(
   //   'https://api.currencybeacon.com/v1/historical?api_key=678605141e3237b7e9c7a02a2edb15e3&base=RUB&symbols=USD,EUR,GBP,JPY,TRY,KZT,UAH,BYN,KGS,CNY,GEL,CHF,PLN&date=2023-01-26',
@@ -65,8 +65,8 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   const rubList = await import('../../../data/allLatestRUBRRes.json');
 
-  if (currency) {
-    currency = String(currency).toUpperCase();
+  if (baseCurrency) {
+    baseCurrency = String(baseCurrency).toUpperCase();
   }
 
   // const usdRate = await import('../../data/allLatestUSDRes.json');
@@ -78,12 +78,13 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   return {
     props: {
-      rates: serializeRubList,
-      base: currency,
-      currencies: currenciesWithFlags,
+      // rates: serializeRubList,
+      rates: { [rates.base]: rates },
+      base: baseCurrency,
       // historical: historicalData.response,
       historical: { ...rubHistorical },
     },
+    revalidate: 1,
   };
 }
 

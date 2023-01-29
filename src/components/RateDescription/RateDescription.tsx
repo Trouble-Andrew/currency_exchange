@@ -1,17 +1,10 @@
 import { convertData } from '@/utils/convertData';
 import { Box, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 interface RateDescription {
   fromCurrencyName: string | null;
   toCurrencyName: string | null;
-  date: string;
-  value: string | number | null;
-}
-
-interface HydrationProps {
-  from: string | null;
-  to: string | null;
   date: string;
   value: string | number | null;
 }
@@ -22,30 +15,14 @@ const RateDescription = ({
   date,
   value,
 }: RateDescription) => {
-  const [hydrationProps, setHydrationProps] = useState<HydrationProps>({
-    from: '',
-    to: '',
-    date: '',
-    value: '',
-  });
-
-  useEffect(() => {
-    setHydrationProps({
-      from: fromCurrencyName,
-      to: toCurrencyName,
-      date,
-      value,
-    });
-  }, [fromCurrencyName, toCurrencyName, date, value]);
-
   return (
     <Box>
       <Typography variant="body2" component="p" sx={{ mb: '0.2rem' }}>
-        1 {hydrationProps.from} = {hydrationProps.value} {hydrationProps.to}
+        {`1 ${fromCurrencyName} ${value ? `= ${value} ${toCurrencyName}` : ''}`}
       </Typography>
       <Typography variant="caption" component="p" sx={{ opacity: '0.7' }}>
         All data and information is provided “as is” for informational purposes
-        only &#x2022; {convertData(hydrationProps.date)}
+        only &#x2022; {date && convertData(date)}
       </Typography>
     </Box>
   );
