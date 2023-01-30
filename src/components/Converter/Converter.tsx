@@ -28,7 +28,6 @@ interface State {
   from: string;
   to: string;
   amount: string | number;
-  rates: Rates;
 }
 
 function reducer(state: State, action: ActionType): State {
@@ -62,15 +61,20 @@ function reducer(state: State, action: ActionType): State {
 }
 
 const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
+  const { push, query, asPath } = useRouter();
+
   const currencies = CURRENCIES;
-  const { push, query, asPath, pathname } = useRouter();
-  const { rate, isLoading, isError } = useRate(query.from || from);
+  const queryFrom = query.from as string;
+  const queryAmount = query.from as string | number;
+  const queryTo = query.to as string;
+
+  const { rate, isLoading, isError } = useRate(queryFrom || from);
   const { setQuery, addRate, rates } = useGlobalContext();
 
   const [state, dispatch] = useReducer(reducer, {
-    amount: query?.amount || amount,
-    from: query?.from || from,
-    to: query?.to || to,
+    amount: queryAmount || amount,
+    from: queryFrom || from,
+    to: queryTo || to,
   });
 
   let currentRate = getCurrentRate(state.from, state.to, rates);
