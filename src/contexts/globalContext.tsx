@@ -1,5 +1,5 @@
-import { Rate, Rates } from 'models/Rates';
 import React, { useState, PropsWithChildren, useReducer } from 'react';
+import { Rate, Rates } from 'models/Rates';
 
 interface GlobalContextProps {
   queries: string;

@@ -119,7 +119,6 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
   };
 
   const selectFromHandler = async (currencyCode: string) => {
-    console.log(isLoading);
     dispatch({ type: 'set_from', payload: currencyCode });
 
     push({ query: { ...query, from: currencyCode } }, undefined, {
@@ -136,8 +135,7 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
   };
 
   const inputFromHandler = async (amount: string | number) => {
-    if (currentRate) {
-      // console.log(calculate(amount, currentRate));
+    if (currentRate && amount) {
       const calculatedValue = calculate(amount, currentRate);
 
       dispatch({ type: 'set_amount', payload: calculatedValue });
@@ -151,7 +149,7 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
   };
 
   const inputToHandler = async (amount: string | number) => {
-    if (currentRate) {
+    if (currentRate && amount) {
       const calculatedValue = calculate(amount, currentRate);
 
       dispatch({ type: 'set_amount', payload: calculatedValue });

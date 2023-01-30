@@ -50,6 +50,31 @@ const CurrencySelect = memo(function CurrencySelect({
 
     // @ts-ignore
     const enteredValue = e.nativeEvent.data;
+    const firstChar = e.currentTarget.value[0];
+    const secondChar = e.currentTarget.value[1];
+
+    // console.log('ENTERED VALUE: ', enteredValue);
+    // console.log('input: ', e.currentTarget.value);
+    // console.log('first char: ', firstChar);
+    // console.log(e.currentTarget.value.length);
+
+    if (
+      firstChar === '0' &&
+      enteredValue === '0' &&
+      e.currentTarget.value.length > 1 &&
+      e.currentTarget.value.length < 3
+    ) {
+      return;
+    }
+
+    if (
+      firstChar === '0' &&
+      secondChar !== '.' &&
+      e.currentTarget.value.length > 1
+    ) {
+      setValue(e.currentTarget.value.replace('0', ''));
+      return;
+    }
 
     if (
       !Number.isNaN(parseFloat(e.currentTarget.value)) ||
