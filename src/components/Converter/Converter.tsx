@@ -1,4 +1,4 @@
-import { CircularProgress, IconButton } from '@mui/material';
+import { Button, CircularProgress, IconButton } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState, useReducer, memo } from 'react';
 import CurrencySelect from '../CurrencySelect/CurrencySelect';
@@ -62,6 +62,7 @@ function reducer(state: State, action: ActionType): State {
 
 const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
   const { push, query, asPath } = useRouter();
+  const router = useRouter();
 
   const currencies = CURRENCIES;
   const queryFrom = query.from as string;
@@ -109,10 +110,6 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
 
     setQuery(asPath);
   }, [state.from, state.to, isLoading, isError, currentRate]);
-
-  // useEffect(() => {
-  //   setQuery(asPath);
-  // });
 
   const handleToggle = async () => {
     dispatch({ type: 'toggle' });
@@ -170,6 +167,16 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
     }
   };
 
+  const resetHandler = () => {
+    push('/');
+
+    dispatch({ type: 'set_from', payload: INITIAL_FROM_CURRENCY });
+    dispatch({ type: 'set_to', payload: INITIAL_TO_CURRENCY });
+    dispatch({ type: 'set_amount', payload: 1 });
+
+    setFromValue(1);
+  };
+
   return (
     <Box
       sx={{
@@ -188,7 +195,7 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
           flexDirection: { xs: 'column', sm: 'row' },
           alignItems: 'center',
           justifyContent: 'center',
-          mb: '2rem',
+          mb: '1rem',
         }}
       >
         <CurrencySelect
@@ -215,6 +222,19 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
           changeValueHandler={inputToHandler}
         />
       </Box>
+      <Button
+        variant="outlined"
+        sx={{
+          ml: 'auto',
+          color: 'white',
+          display: 'block',
+          fontSize: '.7rem',
+          p: '0.2rem 0.8rem',
+        }}
+        onClick={resetHandler}
+      >
+        reset
+      </Button>
       <RateDescription
         fromCurrencyName={getCurrencyName(state.from, currencies)}
         toCurrencyName={getCurrencyName(state.to, currencies)}

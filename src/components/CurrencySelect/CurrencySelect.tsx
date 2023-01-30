@@ -92,7 +92,7 @@ const CurrencySelect = memo(function CurrencySelect({
       <FormControl variant="standard">
         <OutlinedInput
           id="outlined-adornment-password"
-          type={'text'}
+          type={'number'}
           value={value}
           onChange={changeInputHandler}
           inputProps={{
