@@ -65,7 +65,7 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
 
   const currencies = CURRENCIES;
   const queryFrom = query.from as string;
-  const queryAmount = query.from as string | number;
+  const queryAmount = query.amount as string | number;
   const queryTo = query.to as string;
 
   const { rate, isLoading, isError } = useRate(queryFrom || from);
