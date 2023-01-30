@@ -63,7 +63,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   // );
   // const historicalData = await historical.json();
 
-  const rubList = await import('../../../data/allLatestRUBRRes.json');
+  // const rubList = await import('../../../data/allLatestRUBRRes.json');
 
   if (baseCurrency) {
     baseCurrency = String(baseCurrency).toUpperCase();
@@ -74,7 +74,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   // useCurrencyStore.getState().addRate(serializeUsdRate.default.response);
 
   // fetchLatestRates();
-  const serializeRubList = { [rubList.base]: { ...rubList } };
+  // const serializeRubList = { [rubList.base]: { ...rubList } };
 
   return {
     props: {
@@ -97,6 +97,6 @@ export async function getStaticPaths() {
 
   return {
     paths: allPaths,
-    fallback: true,
+    fallback: false,
   };
 }
