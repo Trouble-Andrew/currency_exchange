@@ -5,7 +5,7 @@ import { Poppins } from '@next/font/google';
 import Head from 'next/head';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { GetServerSidePropsContext } from 'next';
-import { INITIAL_FROM_CURRENCY } from './constants';
+import { INITIAL_FROM_CURRENCY } from '../lib/constants';
 import { GlobalContextProvider } from '@/contexts/globalContext';
 
 const poppins = Poppins({

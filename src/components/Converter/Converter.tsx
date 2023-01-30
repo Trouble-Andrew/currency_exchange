@@ -14,7 +14,7 @@ import {
   INITIAL_FROM_CURRENCY,
   INITIAL_TO_CURRENCY,
   CURRENCIES,
-} from '@/pages/constants';
+} from '@/lib/constants';
 import { useGlobalContext } from '@/contexts';
 import useRate from '@/hooks/useRate';
 

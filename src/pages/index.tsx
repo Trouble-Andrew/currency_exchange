@@ -2,7 +2,7 @@ import HomePage from '@/components/HomePage/HomePage';
 import { CurrencyProps } from 'models/Currency';
 import { Rates } from 'models/Rates';
 import { GetServerSidePropsContext } from 'next';
-import { INITIAL_FROM_CURRENCY, INITIAL_TO_CURRENCY } from './constants';
+import { INITIAL_FROM_CURRENCY, INITIAL_TO_CURRENCY } from '../lib/constants';
 
 export interface InitialProps {
   amount: string | number;

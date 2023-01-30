@@ -1,4 +1,4 @@
-import { CURRENCY_CODES, MAIN_KEY, MAIN_URl } from '../constants';
+import { CURRENCY_CODES, MAIN_KEY, MAIN_URl } from '../../lib/constants';
 import { Rate, Rates as RatesInterface } from 'models/Rates';
 import { GetStaticPropsContext } from 'next';
 import { CurrencyList } from 'models/Currency';
@@ -51,7 +51,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   //   `${MAIN_URl}/latest?api_key=${MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}`,
   // );
   const ratesResponse = await fetch(
-    `https://gist.githubusercontent.com/Trouble-Andrew/f796c665bec4e6ca919285267d06ce84/raw/ed902c9a133f4ca946644da3c8319d89f1764903/${baseCurrency.toLowerCase()}.json`,
+    `https://gist.githubusercontent.com/Trouble-Andrew/f796c665bec4e6ca919285267d06ce84/raw/7c8e6d401423e1dcb6bc02e1637621af8d7c3ce6/${baseCurrency.toLowerCase()}.json`,
   );
   const ratesJson = await ratesResponse.json();
   const rates = await ratesJson.response;
@@ -97,6 +97,6 @@ export async function getStaticPaths() {
 
   return {
     paths: allPaths,
-    fallback: false,
+    fallback: true,
   };
 }

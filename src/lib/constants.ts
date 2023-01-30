@@ -14,7 +14,7 @@ export const MAIN_KEY = '678605141e3237b7e9c7a02a2edb15e3';
 // 'https://api.currencybeacon.com/v1/historical?api_key=678605141e3237b7e9c7a02a2edb15e3&base=RUB&symbols=USD,EUR,GBP,JPY,TRY,KZT,UAH,BYN,KGS,CNY,GEL,CHF,PLN&date=2023-01-26'
 
 // gist
-// https://gist.githubusercontent.com/Trouble-Andrew/f796c665bec4e6ca919285267d06ce84/raw/ed902c9a133f4ca946644da3c8319d89f1764903/byn.json
+// https://gist.githubusercontent.com/Trouble-Andrew/f796c665bec4e6ca919285267d06ce84/raw/7c8e6d401423e1dcb6bc02e1637621af8d7c3ce6/byn.json
 
 export const INITIAL_FROM_CURRENCY = 'RUB';
 export const INITIAL_TO_CURRENCY = 'USD';

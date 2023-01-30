@@ -8,9 +8,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Rate, Rates } from 'models/Rates';
 import { CurrencyList } from 'models/Currency';
-import { CURRENCY_CODES } from '@/pages/constants';
+import { CURRENCY_CODES } from '@/lib/constants';
 import Row from '../Row/Row';
-import { CURRENCIES } from '@/pages/constants';
+import { CURRENCIES } from '@/lib/constants';
 
 interface RatesTableProps {
   rates: Rates;
