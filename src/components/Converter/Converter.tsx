@@ -154,7 +154,7 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
 
   const inputToHandler = async (amount: string | number) => {
     if (currentRate && amount) {
-      const calculatedValue = calculate(amount, currentRate);
+      const calculatedValue = calculate(amount, currentRate, true);
 
       dispatch({ type: 'set_amount', payload: calculatedValue });
       setToValue(Number(amount));
