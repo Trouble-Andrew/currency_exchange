@@ -175,6 +175,10 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
     dispatch({ type: 'set_amount', payload: 1 });
 
     setFromValue(1);
+
+    if (currentRate) {
+      setToValue(calculate(1, currentRate));
+    }
   };
 
   return (
