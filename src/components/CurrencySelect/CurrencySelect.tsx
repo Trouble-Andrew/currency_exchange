@@ -98,7 +98,7 @@ const CurrencySelect = memo(function CurrencySelect({
           inputProps={{
             type: 'number',
             min: '0',
-            pattern: '[0-9]*',
+            inputmode: 'decimal',
           }}
           sx={{
             fontSize: { xs: '1.5rem' },
@@ -147,6 +147,7 @@ const CurrencySelect = memo(function CurrencySelect({
                       display: 'flex',
                       justifyContent: 'center',
                       backfaceVisibility: 'hidden',
+                      fontFamily: 'var(--font-poppins)',
                     }}
                   >
                     <CurrencyFlag currency={currency} />

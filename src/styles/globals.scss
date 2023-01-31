@@ -4,6 +4,7 @@
   --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
     'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
     'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+  --font-poppins: 'Poppins', Arial;
 
   --foreground-rgb: 0, 0, 0;
 
@@ -13,6 +14,7 @@
   --color-green: #26ab2c;
   --color-red: #b30021;
   --color-white: #ffffff;
+  --color-white-opacity: rgba(255, 255, 255, 0.7);
 
   --primary-glow: conic-gradient(
     from 180deg at 50% 50%,

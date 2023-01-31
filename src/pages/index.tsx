@@ -33,7 +33,7 @@ function Home({ amount, from, to }: InitialProps) {
     console.log(amount, from, to);
   }, []);
 
-  return <HomePage amount={amount} from={from} to={to} />;
+  return <HomePage />;
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
