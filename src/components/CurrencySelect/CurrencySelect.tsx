@@ -98,7 +98,7 @@ const CurrencySelect = memo(function CurrencySelect({
           inputProps={{
             type: 'number',
             min: '0',
-            inputmode: 'decimal',
+            inputMode: 'decimal',
           }}
           sx={{
             fontSize: { xs: '1.5rem' },

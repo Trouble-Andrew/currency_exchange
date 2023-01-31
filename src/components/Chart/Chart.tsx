@@ -34,8 +34,8 @@ const Chart = memo(function Chart() {
   const { timeseries, isLoading, isError } = useTimeseries(from);
   const timeseriesArray = timeseries ? objectToArray(timeseries?.rates) : [];
 
-  console.log(timeseries);
-  console.log(isLoading);
+  // console.log(timeseries);
+  // console.log(isLoading);
 
   return (
     <Box

@@ -114,25 +114,45 @@ export const GlobalContextProvider = (props: PropsWithChildren) => {
   }
 
   function setFrom(from: string) {
-    dispatch({
-      type: 'set_from',
-      payload: from,
-    });
+    if (from === state.to) {
+      dispatch({
+        type: 'toggle',
+      });
 
-    push({ query: { ...query, from: from } }, undefined, {
-      shallow: true,
-    });
+      push({ query: { ...query, from: state.to, to: state.from } }, undefined, {
+        shallow: true,
+      });
+    } else {
+      dispatch({
+        type: 'set_from',
+        payload: from,
+      });
+
+      push({ query: { ...query, from: from } }, undefined, {
+        shallow: true,
+      });
+    }
   }
 
   function setTo(to: string) {
-    dispatch({
-      type: 'set_to',
-      payload: to,
-    });
+    if (to === state.from) {
+      dispatch({
+        type: 'toggle',
+      });
 
-    push({ query: { ...query, to: to } }, undefined, {
-      shallow: true,
-    });
+      push({ query: { ...query, from: state.to, to: state.from } }, undefined, {
+        shallow: true,
+      });
+    } else {
+      dispatch({
+        type: 'set_to',
+        payload: to,
+      });
+
+      push({ query: { ...query, to: to } }, undefined, {
+        shallow: true,
+      });
+    }
   }
 
   function toggle() {

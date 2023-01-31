@@ -9,9 +9,9 @@ import Chart from '../Chart/Chart';
 const HomePage = memo(function HomePage() {
   const { from, to, rates } = useGlobalContext();
 
-  console.log('FROM: ', from);
-  console.log('TO: ', to);
-  console.log(rates);
+  // console.log('FROM: ', from);
+  // console.log('TO: ', to);
+  // console.log(rates);
 
   return (
     <Box sx={{ pt: { xs: '2vh', sm: '5vh' } }}>
