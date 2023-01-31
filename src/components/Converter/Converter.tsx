@@ -18,73 +18,33 @@ import {
 import { useGlobalContext } from '@/contexts';
 import useRate from '@/hooks/useRate';
 
-type ActionType =
-  | { type: 'set_amount'; payload: string | number }
-  | { type: 'set_from'; payload: string }
-  | { type: 'set_to'; payload: string }
-  | { type: 'toggle' };
-
-interface State {
-  from: string;
-  to: string;
-  amount: string | number;
-}
-
-function reducer(state: State, action: ActionType): State {
-  switch (action.type) {
-    case 'set_amount': {
-      return {
-        ...state,
-        amount: action.payload,
-      };
-    }
-    case 'set_from': {
-      return {
-        ...state,
-        from: action.payload,
-      };
-    }
-    case 'set_to': {
-      return {
-        ...state,
-        to: action.payload,
-      };
-    }
-    case 'toggle': {
-      return {
-        ...state,
-        from: state.to,
-        to: state.from,
-      };
-    }
-  }
-}
-
-const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
+const Converter = memo(function Converter() {
   const { push, query, asPath } = useRouter();
-  const router = useRouter();
 
   const currencies = CURRENCIES;
-  const queryFrom = query.from as string;
-  const queryAmount = query.amount as string | number;
-  const queryTo = query.to as string;
 
-  const { rate, isLoading, isError } = useRate(queryFrom || from);
-  const { setQuery, addRate, rates } = useGlobalContext();
+  const {
+    amount,
+    from,
+    to,
+    rates,
+    addRate,
+    setFrom,
+    setAmount,
+    setQuery,
+    setTo,
+    toggle,
+  } = useGlobalContext();
 
-  const [state, dispatch] = useReducer(reducer, {
-    amount: queryAmount || amount,
-    from: queryFrom || from,
-    to: queryTo || to,
-  });
+  const { rate, isLoading, isError } = useRate(from);
 
-  let currentRate = getCurrentRate(state.from, state.to, rates);
+  let currentRate = getCurrentRate(from, to, rates);
   // console.log('CURRENT RATE: ', currentRate);
   // console.log('CURRENT RATE: ', rates);
 
-  const [fromValue, setFromValue] = useState(state.amount);
+  const [fromValue, setFromValue] = useState(amount);
   const [toValue, setToValue] = useState(
-    calculate(state.amount, currentRate !== null ? currentRate : 1),
+    calculate(amount, currentRate !== null ? currentRate : 1),
   );
 
   // console.log('STATE: ', state);
@@ -109,37 +69,25 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
     }
 
     setQuery(asPath);
-  }, [state.from, state.to, isLoading, isError, currentRate]);
+  }, [from, to, isLoading, isError, currentRate]);
 
   const handleToggle = async () => {
-    dispatch({ type: 'toggle' });
-
-    push({ query: { ...query, from: state.to, to: state.from } }, undefined, {
-      shallow: true,
-    });
+    toggle();
   };
 
   const selectFromHandler = async (currencyCode: string) => {
-    dispatch({ type: 'set_from', payload: currencyCode });
-
-    push({ query: { ...query, from: currencyCode } }, undefined, {
-      shallow: true,
-    });
+    setFrom(currencyCode);
   };
 
   const selectToHandler = async (currencyCode: string) => {
-    dispatch({ type: 'set_to', payload: currencyCode });
-
-    push({ query: { ...query, to: currencyCode } }, undefined, {
-      shallow: true,
-    });
+    setTo(currencyCode);
   };
 
   const inputFromHandler = async (amount: string | number) => {
     if (currentRate && amount) {
       const calculatedValue = calculate(amount, currentRate);
 
-      dispatch({ type: 'set_amount', payload: calculatedValue });
+      setAmount(calculatedValue);
       setToValue(calculate(amount, currentRate));
       setFromValue(Number(amount));
 
@@ -153,7 +101,7 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
     if (currentRate && amount) {
       const calculatedValue = calculate(amount, currentRate, true);
 
-      dispatch({ type: 'set_amount', payload: calculatedValue });
+      setAmount(calculatedValue);
       setToValue(Number(amount));
       setFromValue(calculatedValue);
 
@@ -170,9 +118,9 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
   const resetHandler = () => {
     push('/');
 
-    dispatch({ type: 'set_from', payload: INITIAL_FROM_CURRENCY });
-    dispatch({ type: 'set_to', payload: INITIAL_TO_CURRENCY });
-    dispatch({ type: 'set_amount', payload: 1 });
+    setAmount(1);
+    setFrom(INITIAL_FROM_CURRENCY);
+    setTo(INITIAL_TO_CURRENCY);
 
     setFromValue(1);
   };
@@ -201,7 +149,7 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
         <CurrencySelect
           currencies={currencies}
           initialValue={fromValue}
-          initialCurrency={state.from}
+          initialCurrency={from}
           changeCurrencyHandler={selectFromHandler}
           changeValueHandler={inputFromHandler}
         />
@@ -216,7 +164,7 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
         </IconButton>
         <CurrencySelect
           currencies={currencies}
-          initialCurrency={state.to}
+          initialCurrency={to}
           initialValue={toValue}
           changeCurrencyHandler={selectToHandler}
           changeValueHandler={inputToHandler}
@@ -237,9 +185,9 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
         reset
       </Button>
       <RateDescription
-        fromCurrencyName={getCurrencyName(state.from, currencies)}
-        toCurrencyName={getCurrencyName(state.to, currencies)}
-        date={rates[state.from]?.date}
+        fromCurrencyName={getCurrencyName(from, currencies)}
+        toCurrencyName={getCurrencyName(to, currencies)}
+        date={rates[from]?.date}
         value={currentRate}
       />
       {isLoading && (

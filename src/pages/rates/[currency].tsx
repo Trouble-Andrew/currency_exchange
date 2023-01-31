@@ -9,6 +9,9 @@ import { Typography } from '@mui/material';
 import { convertData } from '@/utils/convertData';
 import { memo } from 'react';
 import { getCurrencySymbols } from '@/utils/getCurrencySymbols';
+import { objectToArray } from '@/utils/objectToArray';
+import * as V from 'victory';
+import { VictoryBar, VictoryChart, VictoryLine } from 'victory';
 
 interface Rates {
   rates: RatesInterface;
@@ -16,9 +19,33 @@ interface Rates {
   historical: Rate;
 }
 
+// const data = [
+//   { quarter: 1, earnings: 13000 },
+//   { quarter: 2, earnings: 16500 },
+//   { quarter: 3, earnings: 14250 },
+//   { quarter: 4, earnings: 19000 },
+// ];
+
 const Rates = memo(function Rates({ base, rates, historical }: Rates) {
+  // fetch(
+  //   'https://gist.githubusercontent.com/Trouble-Andrew/a3455838c45b3fd4e6d2c27f4daea020/raw/8b9687206d94d315e2f3609081adbaedcbc14d76/rub.json',
+  // )
+  //   .then((res) => res.json())
+  //   .then((data) => data.rates)
+  //   .then((rates) => objectToArray(rates))
+  //   .then((rates) => console.log(rates));
+
   return (
     <Box>
+      {/* <VictoryChart domainPadding={20}>
+        <VictoryLine
+          data={data}
+          // data accessor for x values
+          x="quarter"
+          // data accessor for y values
+          y="earnings"
+        />
+      </VictoryChart> */}
       <Typography
         variant="h3"
         component="h2"
