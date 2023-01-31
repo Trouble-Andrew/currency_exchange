@@ -98,8 +98,10 @@ const CurrencySelect = memo(function CurrencySelect({
           inputProps={{
             type: 'number',
             min: '0',
+            pattern: '[0-9]*',
           }}
           sx={{
+            fontSize: { xs: '1.5rem' },
             pr: '0',
             '&:hover': {
               '.MuiSelect-select fieldset': {

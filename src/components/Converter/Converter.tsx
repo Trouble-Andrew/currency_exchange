@@ -226,6 +226,7 @@ const Converter = memo(function Converter({ amount, from, to }: InitialProps) {
         variant="outlined"
         sx={{
           ml: 'auto',
+          mb: { xs: '0.7rem', sm: '0' },
           color: 'white',
           display: 'block',
           fontSize: '.7rem',
