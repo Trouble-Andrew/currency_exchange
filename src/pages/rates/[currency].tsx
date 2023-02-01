@@ -49,7 +49,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   // const rubHistorical = await import('../../../data/historicalRub.json');
 
   const ratesResponse = await fetch(
-    `${process.env.MAIN_URl}/latest?api_key=${process.env.MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}`,
+    `${process.env.MAIN_URL}/latest?api_key=${process.env.MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}`,
   );
 
   // const ratesResponse = await fetch(
@@ -60,7 +60,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   const rates = await ratesJson.response;
 
   const historical = await fetch(
-    `${process.env.MAIN_URl}/historical?api_key=${process.env.MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}&date=${previousDate}`,
+    `${process.env.MAIN_URL}/historical?api_key=${process.env.MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}&date=${previousDate}`,
   );
   const historicalData = await historical.json();
 

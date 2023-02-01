@@ -7,7 +7,7 @@ const useRate = (base: string) => {
   const otherCurrencies = getCurrencySymbols(base);
 
   const { data, error, isLoading } = useSWR(
-    `${process.env.MAIN_URl}/latest?api_key=${process.env.MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}`,
+    `${process.env.MAIN_URL}/latest?api_key=${process.env.MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}`,
     fetcher,
     {
       revalidateIfStale: false,
