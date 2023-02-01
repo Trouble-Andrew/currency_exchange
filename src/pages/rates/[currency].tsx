@@ -1,14 +1,14 @@
-import { CURRENCY_CODES, MAIN_KEY, MAIN_URl } from '../../lib/constants';
+import { CURRENCY_CODES } from '../../lib/constants';
 import { Rate, Rates as RatesInterface } from 'models/Rates';
 import { GetStaticPropsContext } from 'next';
-import { CurrencyList } from 'models/Currency';
-import { addFlagToCurrency } from '@/utils/addFlagsToCurrency';
 import { Box } from '@mui/system';
 import RatesTable from '@/components/RatesTable/RatesTable';
 import { Typography } from '@mui/material';
 import { convertData } from '@/utils/convertData';
 import { memo } from 'react';
 import { getCurrencySymbols } from '@/utils/getCurrencySymbols';
+import { formatDate } from '@/utils/formatDate';
+import { getPreviousDay } from '@/utils/getPreviousDay';
 
 interface Rates {
   rates: RatesInterface;
@@ -44,20 +44,23 @@ export default Rates;
 export async function getStaticProps(context: GetStaticPropsContext) {
   let baseCurrency = context.params?.currency as string;
   const otherCurrencies = getCurrencySymbols(baseCurrency);
+  const previousDate = formatDate(getPreviousDay());
 
   // const rubHistorical = await import('../../../data/historicalRub.json');
 
   const ratesResponse = await fetch(
-    `${MAIN_URl}/latest?api_key=${MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}`,
+    `${process.env.MAIN_URl}/latest?api_key=${process.env.MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}`,
   );
+
   // const ratesResponse = await fetch(
   //   `https://gist.githubusercontent.com/Trouble-Andrew/f796c665bec4e6ca919285267d06ce84/raw/7c8e6d401423e1dcb6bc02e1637621af8d7c3ce6/${baseCurrency.toLowerCase()}.json`,
   // );
+
   const ratesJson = await ratesResponse.json();
   const rates = await ratesJson.response;
 
   const historical = await fetch(
-    'https://api.currencybeacon.com/v1/historical?api_key=678605141e3237b7e9c7a02a2edb15e3&base=RUB&symbols=USD,EUR,GBP,JPY,TRY,KZT,UAH,BYN,KGS,CNY,GEL,CHF,PLN&date=2023-01-26',
+    `${process.env.MAIN_URl}/historical?api_key=${process.env.MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}&date=${previousDate}`,
   );
   const historicalData = await historical.json();
 
