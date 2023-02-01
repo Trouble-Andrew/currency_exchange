@@ -1,5 +1,5 @@
 import React, { useEffect, useState, memo } from 'react';
-import { Currency, CurrencyList, CurrencyProps } from 'models/Currency';
+import { CurrencyProps } from 'models/Currency';
 import {
   FormControl,
   InputAdornment,
@@ -53,11 +53,6 @@ const CurrencySelect = memo(function CurrencySelect({
     const firstChar = e.currentTarget.value[0];
     const secondChar = e.currentTarget.value[1];
 
-    // console.log('ENTERED VALUE: ', enteredValue);
-    // console.log('input: ', e.currentTarget.value);
-    // console.log('first char: ', firstChar);
-    // console.log(e.currentTarget.value.length);
-
     if (
       firstChar === '0' &&
       enteredValue === '0' &&
@@ -98,8 +93,10 @@ const CurrencySelect = memo(function CurrencySelect({
           inputProps={{
             type: 'number',
             min: '0',
+            inputMode: 'decimal',
           }}
           sx={{
+            fontSize: { xs: '1.5rem' },
             pr: '0',
             '&:hover': {
               '.MuiSelect-select fieldset': {
@@ -145,6 +142,7 @@ const CurrencySelect = memo(function CurrencySelect({
                       display: 'flex',
                       justifyContent: 'center',
                       backfaceVisibility: 'hidden',
+                      fontFamily: 'var(--font-poppins)',
                     }}
                   >
                     <CurrencyFlag currency={currency} />

@@ -1,7 +1,7 @@
 import HomePage from '@/components/HomePage/HomePage';
-import { CurrencyProps } from 'models/Currency';
-import { Rates } from 'models/Rates';
+import { useGlobalContext } from '@/contexts';
 import { GetServerSidePropsContext } from 'next';
+import { useEffect } from 'react';
 import { INITIAL_FROM_CURRENCY, INITIAL_TO_CURRENCY } from '../lib/constants';
 
 export interface InitialProps {
@@ -11,19 +11,15 @@ export interface InitialProps {
 }
 
 function Home({ amount, from, to }: InitialProps) {
-  // console.log('INDEX STATE: ', state);
-  // console.log('INDEX CURR: ', currencies);
-  // console.log('INDEX RATES: ', rates);
+  const { setAmount, setFrom, setTo } = useGlobalContext();
 
-  // useEffect(() => {
-  //   // addCurrencies(currencies);
+  useEffect(() => {
+    setAmount(amount);
+    setFrom(from);
+    setTo(to);
+  }, []);
 
-  //   for (const rate in rates) {
-  //     addRate(rates[rate]);
-  //   }
-  // }, [addCurrencies, addRate, currencies, rates]);
-
-  return <HomePage amount={amount} from={from} to={to} />;
+  return <HomePage />;
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
