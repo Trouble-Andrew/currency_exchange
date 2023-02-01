@@ -15,45 +15,27 @@ import {
 } from 'victory';
 import { theme } from './theme';
 
-const data = [
-  { quarter: 1, earnings: 13000 },
-  { quarter: 2, earnings: 16500 },
-  { quarter: 3, earnings: 14250 },
-  { quarter: 4, earnings: 19000 },
-];
+interface CartProps {
+  interval: string;
+}
 
-const Chart = memo(function Chart() {
+const Chart = memo(function Chart({ interval }: CartProps) {
   const { from, to } = useGlobalContext();
-  // fetch(
-  //   'https://gist.githubusercontent.com/Trouble-Andrew/a3455838c45b3fd4e6d2c27f4daea020/raw/8b9687206d94d315e2f3609081adbaedcbc14d76/rub.json',
-  // )
-  //   .then((res) => res.json())
-  //   .then((data) => data.rates)
-  //   .then((rates) => objectToArray(rates))
-  //   .then((rates) => console.log(rates));
-  const { timeseries, isLoading, isError } = useTimeseries(from);
+  const { timeseries, isLoading, isError } = useTimeseries(from, interval);
   const timeseriesArray = timeseries ? objectToArray(timeseries?.rates) : [];
-
-  // console.log(timeseries);
-  // console.log(isLoading);
 
   return (
     <Box
       sx={{
-        position: 'relative',
+        width: '100%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: '5px',
-        backgroundColor: 'var(--color-background-grey-dark)',
-        // maxWidth: '45rem',
-        minHeight: '20rem',
-        p: '15px',
-        m: '0 auto',
-        mb: '1rem',
       }}
     >
-      {isLoading && <CircularProgress color="success" size={40} />}
+      {isLoading && (
+        <CircularProgress color="success" size={40} sx={{ mt: '3rem' }} />
+      )}
       {timeseries && (
         <VictoryChart
           domainPadding={{ x: 10, y: 10 }}

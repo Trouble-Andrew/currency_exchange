@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import Converter from '../Converter/Converter';
 
 import { memo } from 'react';
-import Chart from '../Chart/Chart';
+import ChartsBox from '../ChartsBox/ChartsBox';
 
 const HomePage = memo(function HomePage() {
   const { from, to, rates } = useGlobalContext();
@@ -15,7 +15,7 @@ const HomePage = memo(function HomePage() {
 
   return (
     <Box sx={{ pt: { xs: '2vh', sm: '5vh' } }}>
-      <Chart />
+      <ChartsBox />
       <Converter />
     </Box>
   );
