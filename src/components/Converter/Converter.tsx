@@ -123,6 +123,16 @@ const Converter = memo(function Converter() {
     setTo(INITIAL_TO_CURRENCY);
 
     setFromValue(1);
+
+    const rate = getCurrentRate(
+      INITIAL_FROM_CURRENCY,
+      INITIAL_TO_CURRENCY,
+      rates,
+    );
+
+    if (rate) {
+      setToValue(calculate(1, rate));
+    }
   };
 
   return (
