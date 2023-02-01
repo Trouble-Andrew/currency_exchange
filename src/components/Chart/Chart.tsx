@@ -31,11 +31,11 @@ const Chart = memo(function Chart({ interval }: CartProps) {
       sx={{
         width: '100%',
         height: '100%',
+        minHeight: '18.125rem',
         flexGrow: '1',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        
       }}
     >
       {isLoading && <CircularProgress color="success" size={40} />}

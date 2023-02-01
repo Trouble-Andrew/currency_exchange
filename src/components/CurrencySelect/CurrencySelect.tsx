@@ -1,5 +1,5 @@
 import React, { useEffect, useState, memo } from 'react';
-import { Currency, CurrencyList, CurrencyProps } from 'models/Currency';
+import { CurrencyProps } from 'models/Currency';
 import {
   FormControl,
   InputAdornment,
@@ -52,11 +52,6 @@ const CurrencySelect = memo(function CurrencySelect({
     const enteredValue = e.nativeEvent.data;
     const firstChar = e.currentTarget.value[0];
     const secondChar = e.currentTarget.value[1];
-
-    // console.log('ENTERED VALUE: ', enteredValue);
-    // console.log('input: ', e.currentTarget.value);
-    // console.log('first char: ', firstChar);
-    // console.log(e.currentTarget.value.length);
 
     if (
       firstChar === '0' &&

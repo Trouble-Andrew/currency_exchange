@@ -45,44 +45,33 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   let baseCurrency = context.params?.currency as string;
   const otherCurrencies = getCurrencySymbols(baseCurrency);
 
-  const rubHistorical = await import('../../../data/historicalRub.json');
+  // const rubHistorical = await import('../../../data/historicalRub.json');
 
-  // const ratesResponse = await fetch(
-  //   `${MAIN_URl}/latest?api_key=${MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}`,
-  // );
   const ratesResponse = await fetch(
-    `https://gist.githubusercontent.com/Trouble-Andrew/f796c665bec4e6ca919285267d06ce84/raw/7c8e6d401423e1dcb6bc02e1637621af8d7c3ce6/${baseCurrency.toLowerCase()}.json`,
+    `${MAIN_URl}/latest?api_key=${MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}`,
   );
+  // const ratesResponse = await fetch(
+  //   `https://gist.githubusercontent.com/Trouble-Andrew/f796c665bec4e6ca919285267d06ce84/raw/7c8e6d401423e1dcb6bc02e1637621af8d7c3ce6/${baseCurrency.toLowerCase()}.json`,
+  // );
   const ratesJson = await ratesResponse.json();
   const rates = await ratesJson.response;
 
-  // console.log(rates);
-
-  // const historical = await fetch(
-  //   'https://api.currencybeacon.com/v1/historical?api_key=678605141e3237b7e9c7a02a2edb15e3&base=RUB&symbols=USD,EUR,GBP,JPY,TRY,KZT,UAH,BYN,KGS,CNY,GEL,CHF,PLN&date=2023-01-26',
-  // );
-  // const historicalData = await historical.json();
-
-  // const rubList = await import('../../../data/allLatestRUBRRes.json');
+  const historical = await fetch(
+    'https://api.currencybeacon.com/v1/historical?api_key=678605141e3237b7e9c7a02a2edb15e3&base=RUB&symbols=USD,EUR,GBP,JPY,TRY,KZT,UAH,BYN,KGS,CNY,GEL,CHF,PLN&date=2023-01-26',
+  );
+  const historicalData = await historical.json();
 
   if (baseCurrency) {
     baseCurrency = String(baseCurrency).toUpperCase();
   }
-
-  // const usdRate = await import('../../data/allLatestUSDRes.json');
-  // const serializeUsdRate = { ...usdRate };
-  // useCurrencyStore.getState().addRate(serializeUsdRate.default.response);
-
-  // fetchLatestRates();
-  // const serializeRubList = { [rubList.base]: { ...rubList } };
 
   return {
     props: {
       // rates: serializeRubList,
       rates: { [rates.base]: rates },
       base: baseCurrency,
-      // historical: historicalData.response,
-      historical: { ...rubHistorical },
+      historical: historicalData.response,
+      // historical: { ...rubHistorical },
     },
     revalidate: 1,
   };

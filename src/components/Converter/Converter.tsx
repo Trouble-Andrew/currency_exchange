@@ -1,15 +1,14 @@
 import { Button, CircularProgress, IconButton } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useState, useReducer, memo } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import CurrencySelect from '../CurrencySelect/CurrencySelect';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import RateDescription from '../RateDescription/RateDescription';
 import { getCurrencyName } from '@/utils/getCurrencyName';
-import { Rate, Rates } from 'models/Rates';
 import { getCurrentRate } from '@/utils/getCurrentRate';
 import { calculate } from '@/utils/calculate';
-import { InitialProps } from '@/pages';
 import { useRouter } from 'next/router';
+import { SxProps, Theme } from '@mui/material/styles';
 import {
   INITIAL_FROM_CURRENCY,
   INITIAL_TO_CURRENCY,
@@ -18,7 +17,11 @@ import {
 import { useGlobalContext } from '@/contexts';
 import useRate from '@/hooks/useRate';
 
-const Converter = memo(function Converter() {
+interface ConverterProps {
+  sx?: SxProps<Theme>;
+}
+
+const Converter = memo(function Converter({ sx = [] }: ConverterProps) {
   const { push, query, asPath } = useRouter();
 
   const currencies = CURRENCIES;
@@ -39,19 +42,11 @@ const Converter = memo(function Converter() {
   const { rate, isLoading, isError } = useRate(from);
 
   let currentRate = getCurrentRate(from, to, rates);
-  // console.log('CURRENT RATE: ', currentRate);
-  // console.log('CURRENT RATE: ', rates);
 
   const [fromValue, setFromValue] = useState(amount);
   const [toValue, setToValue] = useState(
     calculate(amount, currentRate !== null ? currentRate : 1),
   );
-
-  // console.log('STATE: ', state);
-  // console.log('QUERY: ', query);
-  // console.log('FETCHER RATE', rate);
-
-  // console.log(rate.response);
 
   useEffect(() => {
     if (currentRate) {
@@ -137,15 +132,18 @@ const Converter = memo(function Converter() {
 
   return (
     <Box
-      sx={{
-        position: 'relative',
-        borderRadius: '5px',
-        backgroundColor: 'var(--color-background-grey-dark)',
-        maxWidth: '45rem',
-        minHeight: '10.125rem',
-        p: '15px',
-        m: '0 auto',
-      }}
+      sx={[
+        {
+          position: 'relative',
+          borderRadius: '5px',
+          backgroundColor: 'var(--color-background-grey-dark)',
+          maxWidth: '45rem',
+          minHeight: '10.125rem',
+          p: '15px',
+          m: '0 auto',
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
     >
       <Box
         sx={{

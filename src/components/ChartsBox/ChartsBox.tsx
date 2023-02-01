@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Box, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import {
+  Box,
+  ToggleButtonGroup,
+  ToggleButton,
+  Typography,
+} from '@mui/material';
 import Chart from '../Chart/Chart';
 
 const toggleStyles = { fontSize: '0.8rem', padding: '0.3rem 0.6rem' };
@@ -50,6 +55,15 @@ const ChartsBox = () => {
         </ToggleButton>
       </ToggleButtonGroup>
       <Chart interval={interval} />
+      <Typography
+        variant="caption"
+        component="p"
+        sx={{ opacity: '0.7', mt: '1rem', alignSelf: 'start' }}
+      >
+        Disclaimer: The data is presented over the time interval from January
+        1st, 2022 to January 30th, 2023, as this type of data is available only
+        in paid tariff plans.
+      </Typography>
     </Box>
   );
 };
