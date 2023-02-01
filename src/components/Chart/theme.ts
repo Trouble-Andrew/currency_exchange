@@ -30,7 +30,7 @@ const baseLabelStyles = {
   letterSpacing,
   padding: -3,
   // marginBottom: 20,
-  fill: white,
+  fill: whiteOpacity,
   stroke: 'transparent',
 };
 

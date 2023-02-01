@@ -1,15 +1,13 @@
 import { useGlobalContext } from '@/contexts';
 import useTimeseries from '@/hooks/useTimeseries';
 import { objectToArray } from '@/utils/objectToArray';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, useMediaQuery } from '@mui/material';
 import { Rates } from 'models/Rates';
 import { memo } from 'react';
 import * as V from 'victory';
 import {
-  VictoryBar,
   VictoryChart,
   VictoryLine,
-  VictoryTheme,
   VictoryAxis,
   VictoryCursorContainer,
   VictoryLabel,
@@ -26,25 +24,32 @@ const Chart = memo(function Chart({ interval }: CartProps) {
   const { from, to } = useGlobalContext();
   const { timeseries, isLoading, isError } = useTimeseries(from, interval);
   const timeseriesArray = timeseries ? objectToArray(timeseries?.rates) : [];
+  const matchesSm = useMediaQuery('(max-width:767px)');
 
   return (
     <Box
       sx={{
         width: '100%',
+        height: '100%',
+        flexGrow: '1',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        
       }}
     >
-      {isLoading && (
-        <CircularProgress color="success" size={40} sx={{ mt: '3rem' }} />
-      )}
+      {isLoading && <CircularProgress color="success" size={40} />}
       {timeseries && (
         <VictoryChart
-          domainPadding={{ x: 10, y: 10 }}
-          padding={20}
+          domainPadding={{ x: [20, 15], y: 5 }}
+          padding={{
+            top: 20,
+            bottom: 20,
+            left: matchesSm ? 20 : 20,
+            right: matchesSm ? 5 : 20,
+          }}
           height={150}
-          width={600}
+          width={matchesSm ? 200 : 600}
           theme={theme}
           containerComponent={
             <VictoryCursorContainer
@@ -67,9 +72,9 @@ const Chart = memo(function Chart({ interval }: CartProps) {
               }
               cursorLabelComponent={
                 <VictoryLabel
-                  style={{ fill: 'var(--color-white)', fontSize: '10px' }}
+                  style={{ fill: 'var(--color-white)', fontSize: '8px' }}
                   dx={-30}
-                  dy={-10}
+                  dy={-5}
                   backgroundPadding={[3, { left: 20, right: 20 }, { left: 20 }]}
                   className={styles.label}
                 />
@@ -80,11 +85,11 @@ const Chart = memo(function Chart({ interval }: CartProps) {
           <VictoryAxis
             crossAxis
             offsetY={20}
-            tickCount={6}
+            tickCount={matchesSm ? 3 : 6}
             tickFormat={(t) => `${t.split('-').reverse().join('.')}`}
             style={{
               grid: { stroke: 'transparent' },
-              tickLabels: { padding: 5 },
+              tickLabels: { padding: 5, fontSize: '8px' },
             }}
           />
 
@@ -105,7 +110,7 @@ const Chart = memo(function Chart({ interval }: CartProps) {
           <VictoryAxis
             dependentAxis
             tickCount={6}
-            offsetX={20}
+            offsetX={matchesSm ? 5 : 20}
             style={{
               grid: {
                 stroke: '#fff',

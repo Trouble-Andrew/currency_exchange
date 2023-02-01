@@ -25,7 +25,7 @@ const ChartsBox = () => {
         borderRadius: '5px',
         backgroundColor: 'var(--color-background-grey-dark)',
         // maxWidth: '45rem',
-        minHeight: '20rem',
+        minHeight: '22rem',
         p: '15px',
         m: '0 auto',
         mb: '1rem',
