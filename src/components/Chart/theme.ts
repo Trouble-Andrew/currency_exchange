@@ -26,7 +26,7 @@ const baseProps = {
 // Labels
 const baseLabelStyles = {
   fontSize,
-  fontFamily: "var(--font-poppins)",
+  fontFamily: 'var(--font-poppins)',
   letterSpacing,
   padding: -3,
   // marginBottom: 20,
@@ -65,7 +65,7 @@ export const theme = {
           strokeWidth: 1,
           strokeLinecap,
           strokeLinejoin,
-          strokeOpacity: 0.5
+          strokeOpacity: 0.5,
         },
         axisLabel: Object.assign({}, centeredLabelStyles, {
           padding: 25,

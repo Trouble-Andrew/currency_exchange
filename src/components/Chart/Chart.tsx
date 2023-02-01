@@ -2,6 +2,7 @@ import { useGlobalContext } from '@/contexts';
 import useTimeseries from '@/hooks/useTimeseries';
 import { objectToArray } from '@/utils/objectToArray';
 import { Box, CircularProgress } from '@mui/material';
+import { Rates } from 'models/Rates';
 import { memo } from 'react';
 import * as V from 'victory';
 import {
@@ -12,7 +13,9 @@ import {
   VictoryAxis,
   VictoryCursorContainer,
   VictoryLabel,
+  LineSegment,
 } from 'victory';
+import styles from './Chart.module.scss';
 import { theme } from './theme';
 
 interface CartProps {
@@ -43,6 +46,36 @@ const Chart = memo(function Chart({ interval }: CartProps) {
           height={150}
           width={600}
           theme={theme}
+          containerComponent={
+            <VictoryCursorContainer
+              cursorDimension="x"
+              cursorLabel={({ datum }) => {
+                const data = timeseriesArray[Math.floor(datum.x)];
+                const rates = data?.value as Rates;
+
+                if (data?.key) {
+                  return `${rates[to]} ${to}\n${data?.key
+                    .split('-')
+                    .reverse()
+                    .join('.')}`;
+                } else {
+                  return;
+                }
+              }}
+              cursorComponent={
+                <LineSegment style={{ stroke: 'var(--color-white)' }} />
+              }
+              cursorLabelComponent={
+                <VictoryLabel
+                  style={{ fill: 'var(--color-white)', fontSize: '10px' }}
+                  dx={-30}
+                  dy={-10}
+                  backgroundPadding={[3, { left: 20, right: 20 }, { left: 20 }]}
+                  className={styles.label}
+                />
+              }
+            />
+          }
         >
           <VictoryAxis
             crossAxis
@@ -67,12 +100,6 @@ const Chart = memo(function Chart({ interval }: CartProps) {
             style={{
               data: { stroke: '#c43a31', strokeWidth: '1px' },
             }}
-            containerComponent={
-              <VictoryCursorContainer
-                cursorDimension="x"
-                cursorLabel={({ datum }) => `${datum.x}, ${datum.y}`}
-              />
-            }
           />
 
           <VictoryAxis
