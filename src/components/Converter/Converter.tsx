@@ -82,7 +82,7 @@ const Converter = memo(function Converter({ sx = [] }: ConverterProps) {
     if (currentRate && amount) {
       const calculatedValue = calculate(amount, currentRate);
 
-      setAmount(calculatedValue);
+      setAmount(amount);
       setToValue(calculate(amount, currentRate));
       setFromValue(Number(amount));
 
@@ -101,7 +101,7 @@ const Converter = memo(function Converter({ sx = [] }: ConverterProps) {
       setFromValue(calculatedValue);
 
       push(
-        { query: { ...query, amount: calculate(amount, currentRate) } },
+        { query: { ...query, amount: calculatedValue } },
         undefined,
         {
           shallow: true,
