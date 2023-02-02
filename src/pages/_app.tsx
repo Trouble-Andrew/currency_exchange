@@ -1,16 +1,26 @@
 import MainLayout from '@/components/MainLayout/MainLayout';
 import '@/styles/globals.scss';
 import type { AppProps } from 'next/app';
-import { Poppins } from '@next/font/google';
+import localFont from '@next/font/local';
 import Head from 'next/head';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { GetServerSidePropsContext } from 'next';
 import { INITIAL_FROM_CURRENCY } from '../lib/constants';
 import { GlobalContextProvider } from '@/contexts/globalContext';
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: '400',
+const poppins = localFont({
+  src: [
+    {
+      path: '../fonts/Poppins-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/Poppins-Regular.woff',
+      weight: '400',
+      style: 'normal',
+    },
+  ],
 });
 
 const darkTheme = createTheme({

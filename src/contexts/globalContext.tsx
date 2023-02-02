@@ -5,10 +5,11 @@ import React, {
   useEffect,
 } from 'react';
 import { Rate, Rates } from 'models/Rates';
+import { useRouter } from 'next/router';
+import { INITIAL_FROM_CURRENCY, INITIAL_TO_CURRENCY } from '@/lib/constants';
 
-interface GlobalContextProps {
+interface GlobalContextProps extends State {
   queries: string;
-  rates: Rates;
   setQuery: (path: string) => void;
   addRate: (rate: Rate) => void;
   setAmount: (amount: string | number) => void;
@@ -18,9 +19,17 @@ interface GlobalContextProps {
   reset: () => void;
 }
 
-type ActionType = { type: 'add_rate'; payload: Rate };
+type ActionType =
+  | { type: 'add_rate'; payload: Rate }
+  | { type: 'set_amount'; payload: string | number }
+  | { type: 'set_from'; payload: string }
+  | { type: 'set_to'; payload: string }
+  | { type: 'toggle' };
 
 interface State {
+  amount: string | number;
+  from: string;
+  to: string;
   rates: Rates;
 }
 
@@ -35,10 +44,38 @@ function reducer(state: State, action: ActionType): State {
         },
       };
     }
+    case 'set_amount': {
+      return {
+        ...state,
+        amount: action.payload,
+      };
+    }
+    case 'set_from': {
+      return {
+        ...state,
+        from: action.payload,
+      };
+    }
+    case 'set_to': {
+      return {
+        ...state,
+        to: action.payload,
+      };
+    }
+    case 'toggle': {
+      return {
+        ...state,
+        from: state.to,
+        to: state.from,
+      };
+    }
   }
 }
 
 const initialContext = {
+  amount: '1',
+  from: INITIAL_FROM_CURRENCY,
+  to: INITIAL_TO_CURRENCY,
   queries: '',
   rates: {},
   setQuery: () => {},
@@ -55,7 +92,17 @@ export const GlobalContext =
 
 export const GlobalContextProvider = (props: PropsWithChildren) => {
   const [currentQuery, setCurrentQuery] = useState(initialContext.queries);
+
+  const { push, query } = useRouter();
+
+  const queryFrom = query.from as string;
+  const queryAmount = query.amount as string | number;
+  const queryTo = query.to as string;
+
   const [state, dispatch] = useReducer(reducer, {
+    amount: queryAmount || '1',
+    from: queryFrom || INITIAL_FROM_CURRENCY,
+    to: queryTo || INITIAL_TO_CURRENCY,
     rates: {},
   });
 
@@ -150,9 +197,16 @@ export const GlobalContextProvider = (props: PropsWithChildren) => {
   return (
     <GlobalContext.Provider
       value={{
+        amount: state.amount,
+        from: state.from,
+        to: state.to,
         queries: currentQuery,
         rates: state.rates,
         setQuery: setCurrentQuery,
+        setAmount,
+        setFrom,
+        setTo,
+        toggle,
         addRate,
         reset,
       }}
