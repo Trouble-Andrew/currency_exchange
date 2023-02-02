@@ -63,9 +63,11 @@ const Converter = memo(function Converter({ sx = [] }: ConverterProps) {
         fetchRate();
       }
     }
-
-    setQuery(asPath);
   }, [from, to, isLoading, isError, currentRate]);
+
+  useEffect(() => {
+    setQuery(asPath);
+  }, [asPath, setQuery]);
 
   const handleToggle = async () => {
     toggle();
@@ -99,23 +101,15 @@ const Converter = memo(function Converter({ sx = [] }: ConverterProps) {
       setToValue(Number(amount));
       setFromValue(calculatedValue);
 
-      push(
-        { query: { ...query, amount: calculatedValue } },
-        undefined,
-        {
-          shallow: true,
-        },
-      );
+      push({ query: { ...query, amount: calculatedValue } }, undefined, {
+        shallow: true,
+      });
     }
   };
 
   const resetHandler = () => {
     push('/');
     reset();
-
-    // setAmount(1);
-    // setFrom(INITIAL_FROM_CURRENCY);
-    // setTo(INITIAL_TO_CURRENCY);
 
     setFromValue(1);
 
