@@ -1,4 +1,9 @@
-import React, { useState, PropsWithChildren, useReducer } from 'react';
+import React, {
+  useState,
+  PropsWithChildren,
+  useReducer,
+  useEffect,
+} from 'react';
 import { Rate, Rates } from 'models/Rates';
 
 interface GlobalContextProps {
@@ -6,6 +11,11 @@ interface GlobalContextProps {
   rates: Rates;
   setQuery: (path: string) => void;
   addRate: (rate: Rate) => void;
+  setAmount: (amount: string | number) => void;
+  setFrom: (from: string) => void;
+  setTo: (to: string) => void;
+  toggle: () => void;
+  reset: () => void;
 }
 
 type ActionType = { type: 'add_rate'; payload: Rate };
@@ -33,6 +43,11 @@ const initialContext = {
   rates: {},
   setQuery: () => {},
   addRate: () => {},
+  setAmount: () => {},
+  setFrom: () => {},
+  setTo: () => {},
+  toggle: () => {},
+  reset: () => {},
 };
 
 export const GlobalContext =
@@ -51,6 +66,87 @@ export const GlobalContextProvider = (props: PropsWithChildren) => {
     });
   }
 
+  function reset() {
+    setCurrentQuery('');
+
+    dispatch({
+      type: 'set_amount',
+      payload: 1,
+    });
+
+    dispatch({
+      type: 'set_from',
+      payload: INITIAL_FROM_CURRENCY,
+    });
+
+    dispatch({
+      type: 'set_to',
+      payload: INITIAL_TO_CURRENCY,
+    });
+  }
+
+  function setAmount(amount: string | number) {
+    dispatch({
+      type: 'set_amount',
+      payload: amount,
+    });
+  }
+
+  function setFrom(from: string) {
+    if (from === state.to) {
+      dispatch({
+        type: 'toggle',
+      });
+
+      push({ query: { ...query, from: state.to, to: state.from } }, undefined, {
+        shallow: true,
+      });
+    } else {
+      dispatch({
+        type: 'set_from',
+        payload: from,
+      });
+
+      push({ query: { ...query, from: from } }, undefined, {
+        shallow: true,
+      });
+    }
+  }
+
+  function setTo(to: string) {
+    if (to === state.from) {
+      dispatch({
+        type: 'toggle',
+      });
+
+      push({ query: { ...query, from: state.to, to: state.from } }, undefined, {
+        shallow: true,
+      });
+    } else {
+      dispatch({
+        type: 'set_to',
+        payload: to,
+      });
+
+      push({ query: { ...query, to: to } }, undefined, {
+        shallow: true,
+      });
+    }
+  }
+
+  function toggle() {
+    const from = state.from;
+    const to = state.to;
+
+    dispatch({
+      type: 'toggle',
+    });
+
+    push({ query: { ...query, from: to, to: from } }, undefined, {
+      shallow: true,
+    });
+  }
+
   return (
     <GlobalContext.Provider
       value={{
@@ -58,6 +154,7 @@ export const GlobalContextProvider = (props: PropsWithChildren) => {
         rates: state.rates,
         setQuery: setCurrentQuery,
         addRate,
+        reset,
       }}
     >
       {props.children}

@@ -15,6 +15,8 @@ function Header() {
 
   const baseCurrency = query.from ? String(query.from).toLowerCase() : 'rub';
 
+  // console.log(queries);
+
   return (
     <AppBar
       position="static"

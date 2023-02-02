@@ -20,7 +20,7 @@ const RateDescription = ({
       <Typography variant="body2" component="p" sx={{ mb: '0.2rem' }}>
         {`1 ${fromCurrencyName} ${value ? `= ${value} ${toCurrencyName}` : ''}`}
       </Typography>
-      <Typography variant="caption" component="p" sx={{ opacity: '0.7' }}>
+      <Typography variant="caption" component="p" sx={{ color: '#ffffffb3' }}>
         All data and information is provided “as is” for informational purposes
         only &#x2022; {date && convertData(date)}
       </Typography>
