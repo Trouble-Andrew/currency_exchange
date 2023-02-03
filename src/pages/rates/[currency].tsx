@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { CURRENCY_CODES } from '../../lib/constants';
 import { Rate, Rates as RatesInterface } from 'models/Rates';
 import { GetStaticPropsContext } from 'next';
@@ -5,7 +6,6 @@ import { Box } from '@mui/system';
 import RatesTable from '@/components/RatesTable/RatesTable';
 import { Typography } from '@mui/material';
 import { convertData } from '@/utils/convertData';
-import { memo } from 'react';
 import { getCurrencySymbols } from '@/utils/getCurrencySymbols';
 import { formatDate } from '@/utils/formatDate';
 import { getPreviousDay } from '@/utils/getPreviousDay';
@@ -16,7 +16,7 @@ interface Rates {
   historical: Rate;
 }
 
-const Rates = memo(function Rates({ base, rates, historical }: Rates) {
+const Rates = function Rates({ base, rates, historical }: Rates) {
   return (
     <Box>
       <Typography
@@ -37,7 +37,7 @@ const Rates = memo(function Rates({ base, rates, historical }: Rates) {
       <RatesTable base={base} rates={rates} historical={historical} />
     </Box>
   );
-});
+};
 
 export default Rates;
 
@@ -46,15 +46,9 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   const otherCurrencies = getCurrencySymbols(baseCurrency);
   const previousDate = formatDate(getPreviousDay());
 
-  // const rubHistorical = await import('../../../data/historicalRub.json');
-
   const ratesResponse = await fetch(
     `${process.env.MAIN_URL}/latest?api_key=${process.env.MAIN_KEY}&base=${baseCurrency}&symbols=${otherCurrencies}`,
   );
-
-  // const ratesResponse = await fetch(
-  //   `https://gist.githubusercontent.com/Trouble-Andrew/f796c665bec4e6ca919285267d06ce84/raw/7c8e6d401423e1dcb6bc02e1637621af8d7c3ce6/${baseCurrency.toLowerCase()}.json`,
-  // );
 
   const ratesJson = await ratesResponse.json();
   const rates = await ratesJson.response;
@@ -70,11 +64,9 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   return {
     props: {
-      // rates: serializeRubList,
       rates: { [rates.base]: rates },
       base: baseCurrency,
       historical: historicalData.response,
-      // historical: { ...rubHistorical },
     },
     revalidate: 1,
   };
